@@ -1,0 +1,59 @@
+# -------------------------
+# virtual environments
+# -------------------------
+.venv/
+venv/
+env/
+
+# -------------------------
+# Build (PyInstaller)
+# -------------------------
+build/
+dist/
+main.spec
+
+# -------------------------
+# Python cache
+# -------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# -------------------------
+# Temporary / debug / test files
+# -------------------------
+hi.py
+output*.png
+plant_check_*.png
+plant_check_final.png
+adb_screen.png
+outputSALE.png
+white.png
+
+# -------------------------
+# Large assets you don't want to upload
+# -------------------------
+想法.md
+
+# -------------------------
+# OS / editor
+# -------------------------
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vscode/
+.idea/
+
+# -------------------------
+# Logs / misc
+# -------------------------
+*.log
+
+# -------------------------
+# Executables
+# -------------------------
+*.exe
+*.dll
+*.so
+demo.mp4
