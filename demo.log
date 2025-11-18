@@ -27,25 +27,6 @@ emulator-5554   device
 【查看】VLM 返回完整内容：辣椒
 【播种判断】提取 VLM 返回值
 【播种判断】VLM 返回结果：辣椒
-【播种判断】结束
-【种地】播种中： 辣椒
-【种地】结束
-【采集】开始
-打开伐木林
-【查看】缩放最小并定位蒲公英
-处理伐木林
-截屏
-【查看】制作 prompt
-【查看】发送给 VLM 等待返回
-【查看】VLM 返回完整内容：<|begin_of_box|>empty<|end_of_box|>
-【查看】提取 VLM 返回值
-处理区域，状态为： empty
-决定采集什么
-截屏
-【查看】制作 prompt
-【查看】发送给 VLM 等待返回
-(.venv) (base) PS E:\after2024\2025-1\taoyuan> ^C
-(.venv) (base) PS E:\after2024\2025-1\taoyuan>  e:; cd 'e:\after2024\2025-1\taoyuan'; & 'e:\after2024\2025-1\taoyuan\.venv\Scripts\python.exe' 'c:\Users\xhy\.vscode\extensions\ms-python.debugpy-2025.10.0-win32-x64\bundled\libs\debugpy\launcher' '36431' '--' 'E:\after2024\2025-1\taoyuan\main.py' 
 开始流程
 【种地】开始
 【查看】缩放最小并定位蒲公英
