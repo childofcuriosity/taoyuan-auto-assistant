@@ -1,55 +1,33 @@
-# -------------------------
-# virtual environments
-# -------------------------
-.venv/
-venv/
-env/
+# === Python 基本忽略 ===
+__pycache__/
+*.py[cod]
 
-# -------------------------
-# Build (PyInstaller)
-# -------------------------
+# === 虚拟环境 ===
+venv/
+.env
+
+# === 运行时产生的临时文件 ===
+*.png
+*.log
+*.mks
+
+# === PyInstaller 打包生成 (新增) ===
+# build 和 dist 文件夹是生成的垃圾和结果，不上传
 build/
 dist/
-main.spec
+# 注意：build.spec 是你手动写的打包配置，属于源码，需要上传！
 
-# -------------------------
-# Python cache
-# -------------------------
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
+# === 例外规则 (强制上传的资源) ===
+# !表示“不忽略”，即强制跟踪这些文件
+!mascot.png
+!app.ico
 
-# -------------------------
-# Temporary / debug / test files
-# -------------------------
-hi.py
-output*.png
-plant_check_*.png
-plant_check_final.png
-adb_screen.png
-outputSALE.png
-white.png
-
-# -------------------------
-# Large assets you don't want to upload
-# -------------------------
+# === 本地配置与个人文件 ===
+# 用户存档，不上传 (data.json 是本地运行生成的)
+data.json
+# 个人笔记
 想法.md
 
-# -------------------------
-# OS / editor
-# -------------------------
-.DS_Store
-Thumbs.db
-Desktop.ini
-.vscode/
-.idea/
-
-
-# -------------------------
-# Executables
-# -------------------------
-*.exe
-*.dll
-*.so
-demo.mp4
+# === 其他文件夹 ===
+old/
+assets/

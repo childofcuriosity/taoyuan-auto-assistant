@@ -1,216 +1,180 @@
 
-
 <p align="center">
   <img src="mascot.png" width="200" alt="桃源自动小助手">
 </p>
-<h1 align="center">🍃 桃源深处有人家 - 自动运营助手</h1>
+<h1 align="center">🍃 桃源深处有人家 - 自动运营助手 (V2)</h1>
 
 <p align="center">
-  基于 <strong>计算机视觉</strong> + <strong>大模型</strong> 的无人值守自动化运营系统
+  基于 <strong>模拟器控制</strong> + <strong>视觉大模型</strong> 的无人值守自动化运营系统
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.10+-blue"/>
-  <img src="https://img.shields.io/badge/Platform-Windows-green"/>
   <img src="https://img.shields.io/badge/Emulator-MuMu-orange"/>
-  <img src="https://img.shields.io/badge/Model-VLM%20%2F%20ZhipuAI-purple"/>
+  <img src="https://img.shields.io/badge/AI-Zhipu%20GLM--4V-purple"/>
 </p>
 
 ---
 
-## 📌 项目简介
+## 📢 V2 版本更新重点
 
-本项目基于 **计算机视觉识别** 与 **自动化控制**，实现对《桃源深处有人家》的全自动运营。
+本项目已迎来重大重构，核心进化如下：
 
-核心策略如下：
-
-* **资源不足 → 自动补种 / 投料**
-* **资源过多 → 自动售卖**
-* 系统循环执行「种地 → 采集 → 生产 → 清仓」四大流程，像生产线一样持续稳定运行。
+1.  **彻底摆脱鼠标**：采用 ADB 后台指令控制。**脚本运行时不占用鼠标**，你可以一边挂机一边操作电脑其他窗口。
+2.  **拥有图形界面**：新增 Tkinter UI 界面，不再需要去代码里改参数。
+3.  **自定义位置**：所有点击坐标、滑动轨迹均可在界面中自由配置，适配不同机型。
 
 ---
 
-## ✨ 功能亮点
+## ✨ 核心功能
 
-### 🌱 自动种植
+### 1. 🌾 智能种田
+* **智能补种**：通过 VLM 识别作物栏库存，自动计算缺口，优先种植库存最少的作物。
+* **无缝衔接**：自动识别土地状态（成熟/空地），实现收种循环。
 
-* 自动检测田地状态（是否可收获、是否需要播种）
-* 自动收割 → 自动判断 → 自动播种
-* 通过 VLM 准确识别土地状态，稳定可靠
+### 2. 🌲 多点采集
+* **自动巡逻**：支持配置多个采集点（伐木林、竹林、息壤等），自动切换场景。
+* **动态决策**：对每个采集点进行截图分析，区分“收获”、“生产”、“工作中”状态，自动执行对应操作。
 
-### 🌳 自动采集
+### 3. 🏭 流水线加工
+* **通用/特殊工坊支持**：自动适配普通工坊（如磨坊）和特殊工坊（如鸡舍）的操作逻辑。
+* **智能生产**：自动收获 $\rightarrow$ 轮询原料库存 $\rightarrow$ 生产最缺的产品。
 
-* 自动处理伐木林、竹林、息壤
-* 根据识别结果判断是否需要采集
-* 支持多轮连续采集流程
+### 4. 🍳 批量烹饪
+* **独立复位**：支持单菜品复位逻辑，防止列表滑动错位。
+* **批量制作**：检测到库存不足时，自动连点制作。
 
-### 🏭 自动生产
+### 5. 📜 自动订单
+* **一键交付**：自动轮询订单栏位，满足条件即刻交付。
 
-覆盖全部生产建筑：
-
-陶瓷 / 土料 / 玩具 / 编织 / 糕坊 / 木工 / 豆腐 / 腌制 / 饼坊 / 制糖 / 铡刀 / 豆坊 / 石磨 / 鸡舍等
-
-* 自动收获产物
-* 自动补料投产
-* 按序遍历所有建筑，无需人工干预
-
-### 🧹 自动清仓售卖
-
-* 检测仓库容量
-* 自动出售超过阈值的资源
-* 始终保持仓库畅通
+### 6. 🌬️ 蒲公英收发
+* **全流程闭环**：自动进入蒲公英小队 $\rightarrow$ 一键收获 $\rightarrow$ 快速装填 $\rightarrow$ 确认出发。
 
 ---
 
-## 🎬 Demo 演示
 
-📺 **[点此播放视频 Demo](https://www.bilibili.com/video/BV1KYyGBsExe)**
-📄 **[点此查看程序输出日志 Demo](./demo.log)**
+## 📝 配置说明
+
+### 1. 配置文件详解
+*   **`data.json`**：这是程序实际读取的**用户存档**。你在 UI 界面修改并保存的配置都会存储在这里。
+*   **`最终参数.json`**：这是作者提供的**全功能参考配置**（基于 1600x900 分辨率）。初次使用建议参考此文件学习参数结构，或者在配置乱了的时候用来恢复。
+
+### 2. 列表格式注意
+在配置界面输入列表参数时，请务必使用**英文逗号** `,` 分隔。
+*   ✅ 正确：`['清汤白菜', '蛋炒饭']`
+*   ❌ 错误：`['清汤白菜'， '蛋炒饭']` （使用了中文逗号）
+
+### 3. 存档与初始化建议
+*   **初次使用**：建议直接将项目目录下的 `最终参数.json` 重命名为 `data.json`，这样打开软件就是全功能默认配置的状态。
+*   **备份建议**：配置好适合你自己的参数后，建议复制一份 `data.json` 存为备份。如果后续改乱了，只需把备份文件改回名为 `data.json` 放到项目根目录即可恢复。
+
+### 4. ⚠️ 操作警告 (重要)
+在“任务列表”界面中，**鼠标滚轮**如果在“任务类型”下拉框上滚动，会直接切换任务类型。
+*   **后果**：切换类型会**立即重置并清空**该任务下所有的参数配置！
+*   **建议**：在浏览列表时，请小心操作滚轮，避免误触下拉框导致配置丢失。
+
 
 ---
 
-## 📮 反馈 & 交流群
+## 📖 自定义指令教学 (ADB Syntax)
 
-QQ群：**1014644523**
-群主即项目作者。
+在软件的“配置填写”界面中，你可以输入自定义指令来控制脚本行为。支持以下语法：
 
-> TODO：作者是 23 级，目前游戏进度有限，因此生产设施支持范围基于现阶段认知。如果你在使用过程中愿意提供账号协助完善，欢迎联系我，让功能支持更全面、配置更自由。
+*   **点击**：`input tap <x> <y>`
+    *   例：`input tap 500 500` (点击屏幕中间)
+*   **滑动**：`input swipe <x1> <y1> <x2> <y2> <duration_ms>`
+    *   例：`input swipe 800 500 200 500 1000` (从右向左滑，耗时1秒)
+*   **等待**：`sleep <秒>`
+    *   例：`sleep 1.5` (等待1.5秒，用于等待弹窗或动画)
+*   **路径拖拽** (本项目特有)：`drag_path <x1> <y1> <x2> <y2> ...`
+    *   用于种田和收割，模拟手指按住不放并依序划过所有坐标。
+    *   例：`drag_path 100 100 200 200 300 300`
 
 ---
 
-# 🚀 快速开始
+---
 
-## 🖥️ 环境需求
+## ⚠️ 运行前配置建议 (Recommended)
 
-1. Windows 系统电脑
-2. 安装 **MuMu 模拟器**
-3. 模拟器内安装《桃源深处有人家》
-4. 模拟器窗口 **全屏模式（否则坐标会错位）**
-5. 游戏内相机高度调至 **超远景**
-6. 修改 `config.py`：
 
-```python
-os.environ["OPENAI_API_KEY"] = "你的智谱APIKey"
-```
+支持 MuMu 模拟器。
+为了减少配置修改的工作量，建议模拟器和游戏设置如下：
 
+
+1.  **分辨率建议**：建议将模拟器分辨率设置为 **1600 x 900 (DPI 240)**。
+    *   *说明：默认参数是基于此分辨率录制的。如果你使用其他分辨率，需要在软件配置界面手动修改所有坐标参数。*
+2.  **获取坐标工具**：为了方便你修改配置，建议在模拟器中开启**指针位置显示**：
+    *   *设置方法*：进入安卓设置 -> 关于手机 -> 连续点击“版本号”7次 -> 返回进入“系统-开发者选项” -> 找到并开启 **“指针位置”**。
+    *   *效果*：开启后，鼠标点击模拟器屏幕上方会显示具体的 (X, Y) 坐标，方便你填入配置。
+3.  **游戏设置**：
+    *   相机高度：**超远景**。
+    *   滑动屏幕：**快**。
+## 🚀 快速开始
+
+### 1. ⚠️ 运行前配置 (必读)
+参考上一节 **“运行前配置建议”**。
+
+### 2. 获取 API Key
+本项目使用 **智谱 AI (GLM-4V)** 进行图像识别。请去智谱开放平台申请 API Key。
 👉 [如何获取智谱 API Key](https://zhipu-ef7018ed.mintlify.app/cn/guide/start/quick-start)
 
----
+### 3. 获取 ADB 路径
+找到模拟器自带的 `adb.exe` 文件路径：
+*   对着桌面上的 **MuMu模拟器** 图标点击右键 -> 选择 **“打开文件所在的位置”**。
+*   在该文件夹下找到 `adb.exe`（在 Windows 中，如果你看不到 .exe 后缀，可以在文件资源管理器中 “查看” → 勾选“文件扩展名” 来显示所有文件后缀）。
 
-## 🟩 方式一：运行源码
+### 4. 运行程序
+请根据你的情况选择一种方式启动：
 
-```bash
-python main.py
-```
+#### 🟩 方式一：运行源码 (推荐开发者)
+1.  确保电脑已安装 Python 3.10+。
+2.  安装项目依赖：
+    ```bash
+    pip install -r requirements.txt
+    ```
+3.  启动脚本：
+    ```bash
+    python main.py
+    ```
 
-缺哪个包就 `pip install` 哪个，依赖非常少。
-
----
-
-## 🟦 方式二：直接使用可执行文件
-
-* TODO：若有用户需要，我会提供打包好的 EXE 版本。
-
----
-
-# 🔁 工作流程概览
-
-> 小小感想：整个代码结构非常清晰，写出来时真的很享受这种“按想法落地”的过程。
-
-```mermaid
-graph TD
-    start((开始)) --> farming[种地]
-    farming --> pick[采集]
-    pick --> production[生产]
-    production --> sale[清仓]
-    sale --> farming
-```
+#### 🟦 方式二：运行 EXE (推荐新手)
+*   请前往 **QQ群 (1014644523)** 的群文件下载最新打包好的程序压缩包。
+*   双击 `.exe` 即可直接运行，无需安装 Python 环境。
 
 ---
 
-# 🌱 种地流程
-
-```mermaid
-graph TD
-    start_farm((开始)) --> check_status{查看状态} 
-    check_status -->|等待| end_farm((结束))
-    check_status -->|可收获| harvest[收获]
-    harvest --> decide_plant{需要播种?}
-    decide_plant -->|否| end_farm
-    decide_plant -->|是| plant_action[播种] --> end_farm
+## 🛠️ 项目结构
+### 📂 源码版结构
+```text
+TAOYUAN/
+├── main.py              # 启动入口
+├── build.spec           # PyInstaller 打包配置脚本 (关键源码)
+├── requirements.txt     # 依赖包列表 (安装环境用)
+├── README.md            # 项目说明文档
+├── app.ico              # 程序图标 (.exe使用)
+├── mascot.png           # 项目展示 Logo
+├── 最终参数.json         # 默认全功能参考配置 (建议新手参考)
+├── data.json            # 你的配置文件 (运行后生成/手动改名，不上传)
+└── src/                 # 核心源码包
+    ├── ui.py            # 图形界面 (Tkinter 动态构建)
+    ├── logic.py         # 业务逻辑与数据持久化
+    ├── tasks.py         # 六大任务的具体逻辑实现
+    ├── adb_utils.py     # ADB 通信、截图、多点触控封装
+    └── ai_client.py     # VLM 大模型调用接口
 ```
-
-### 状态识别流程
-
-```mermaid
-graph TD
-    start_check((开始)) --> zoom_and_locate[缩放并定位蒲公英] 
-    zoom_and_locate --> tap_field[点击田地] 
-    tap_field --> screenshot[截屏] 
-    screenshot --> build_prompt[构造 VLM Prompt] 
-    build_prompt --> send_to_vlm[VLM 识别]  
-    send_to_vlm --> extract_value[提取结果]  
-    extract_value --> end_check((完成))
+### 📦 EXE 发布版结构 (用户到手)
+```text
+TAOYUAN/
+├── TaoyuanHelper.exe    # 双击运行
+├── data.json            # 你的配置文件 (运行后生成/手动改名，不上传)
+├── 最终参数.json         # 默认全功能参考配置 (建议新手参考)
+└── README.md            # 说明书
 ```
-
 ---
 
-# 🌲 采集流程
+## 📮 交流群
 
-```mermaid
-graph TD
-    start_pick((开始)) --> open_forest[伐木林]
-    open_forest --> handle_forest[处理伐木林]
-    handle_forest --> next_area[下一个] --第1次--> handle_bamboo[处理竹林]
-    handle_bamboo --> next_area[下一个] --第2次--> handle_xirang[处理息壤]
-    handle_xirang --> exit_interface[退出]
-```
-
-通用采集逻辑：
-
-```mermaid
-graph TD
-    start_handle((开始)) --> check_status{查看状态} 
-    check_status -->|等待| end_handle((结束))
-    check_status -->|可收获| harvest[收获]
-    harvest --> decide_pick{需要采集?}
-    decide_pick -->|否| end_pick
-    decide_pick -->|是| pick_action[采集] --> end_pick
-```
-
----
-
-# 🏭 生产流程
-
-```mermaid
-graph TD
-    start_pro((开始)) --> open_hens[打开养鸡]
-    open_hens --> step1[陶瓷] --> step2[土料] --> step3[玩具] --> step4[编织] --> step5[糕坊]
-    step5 --> step6[木工] --> step7[豆腐加工] --> step8[腌制] --> step9[饼坊]
-    step9 --> step10[制糖] --> step11[铡刀] --> step12[豆坊] --> step13[石磨]
-    step13 --> step14[鸡舍] --> exit_pro[退出]
-```
-
-通用生产逻辑：
-
-```mermaid
-graph TD
-    start_handle((开始)) --> try_harvest[尝试收获]
-    try_harvest --> figure_state[检查状态]
-    figure_state --> try_produce[尝试投产]
-```
-
----
-
-# 🧹 清仓流程
-
-```mermaid
-graph TD
-    start_sale((开始)) --> open_host[打开仓库]
-    open_host --> process_crop[处理作物]
-    process_crop --> process_product[处理产品]
-    process_product --> exit_sale[退出]
-```
+QQ群：**1014644523**
 
 ---
 

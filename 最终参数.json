@@ -1,0 +1,134 @@
+{
+    "config": {
+        "window_name": "MuMu安卓设备",
+        "adb_path": "C:/Program Files/Netease/MuMu/nx_main/adb.exe",
+        "OPENAI_API_KEY": "你的apikey",
+        "plant_num_limit": "20",
+        "produce_num_limit": "8",
+        "plant_num_sale": "40",
+        "produce_num_sale": "10",
+        "small_delay": "1.5",
+        "big_delay": "8",
+        "reset_pos_order": "1273 829",
+        "reset_pos_exit_order": "1263 860",
+        "reset_pos_dandelion": "1153 826",
+        "reset_pos_exit_dandelion": "100 224"
+    },
+    "tasks": [
+        {
+            "id": 1,
+            "name": "任务 1",
+            "type": "1. 种田 (智能版)",
+            "params": {
+                "area_adb": "input tap 1115 227\nsleep 1",
+                "field_select_adb": "input tap 803 464\nsleep 1",
+                "farm_info_pos": "168 772",
+                "sickle_pos": "795 770",
+                "field_path": "799 465 1144 318 1208 348 867 491 935 517 1260 367 1317 391 1003 544 1071 569 1400 416 1500 443 1143 601 795 770",
+                "crop_limits": "[50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50]",
+                "crop_pos_list": "['340 760', '475 760', '610 760', '745 760', '880 760', '1015 760', '1150 760', '845 760', '980 760', '1115 760', '1250 760']",
+                "crop_is_right_side": "[0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1]",
+                "crop_bar_swipe_adb": "input swipe 1000 760 300 760 600",
+                "stitch_left_x": "1230",
+                "stitch_right_x": "780"
+            },
+            "enable": true
+        },
+        {
+            "id": 2,
+            "name": "任务 2",
+            "type": "1. 种田 (智能版)",
+            "params": {
+                "area_adb": "input swipe 1599 899 200 1 5000\ninput tap 422 592\nsleep 1",
+                "field_select_adb": "input tap 803 464\nsleep 1",
+                "farm_info_pos": "168 772",
+                "sickle_pos": "795 770",
+                "field_path": "799 465 1312 662 1412 625 916 406 1009 361 1519 579 799 465",
+                "crop_limits": "[100, 100, 100]",
+                "crop_pos_list": "['674 759', '802 760', '939 760']",
+                "crop_is_right_side": "[0, 0, 0]",
+                "crop_bar_swipe_adb": "input swipe 1000 760 300 760 600",
+                "stitch_left_x": "1",
+                "stitch_right_x": "1"
+            },
+            "enable": true
+        },
+        {
+            "id": 3,
+            "name": "任务 3",
+            "type": "2. 采集 (全自动版)",
+            "params": {
+                "area_adb": "input swipe 800 450 100 800 5000\ninput tap 1314 460\nsleep 1",
+                "btn_pos": "input tap 1243 750",
+                "nav_adb": "input tap 823 662",
+                "quit_adb": "input tap 763 798",
+                "location_count": "3",
+                "slot_adbs": "['input tap 1040 206', 'input tap 1160 206', 'input tap 1280 206', 'input tap 1400 206']",
+                "item_names_list": "[['木材'], ['青竹'], ['原始土','矿料']]",
+                "item_limits_list": "[[100], [100], [100, 100]]"
+            },
+            "enable": true
+        },
+        {
+            "id": 4,
+            "name": "任务 4",
+            "type": "3. 加工 (普通/特殊工坊)",
+            "params": {
+                "area_adb": "input tap 1223 760\nsleep 2",
+                "nav_adb": "input tap 110 664",
+                "quit_adb": "input tap 100 100",
+                "location_count": "27",
+                "ui_types": "[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]",
+                "normal_slot_adbs": "['input tap 1050 220', 'input tap 1160 220', 'input tap 1260 220', 'input tap 1360 220', 'input tap 1050 320', 'input tap 1160 320', 'input tap 1260 320', 'input tap 1360 320']",
+                "normal_harvest_adb": "input tap 840 815\nsleep 1\ninput tap 1165 550\nsleep 1\ninput tap 710 815\nsleep 1\ninput tap 1165 550\nsleep 1\ninput tap 587 815\nsleep 1\ninput tap 1165 550\nsleep 1\ninput tap 463 815\nsleep 1\ninput tap 1165 550\nsleep 1\ninput tap 331 815\nsleep 1\ninput tap 1165 550\nsleep 1\ninput tap 223 815\nsleep 1\ninput tap 1165 550\nsleep 1\n",
+                "normal_produce_btn": "input tap 1300 760",
+                "special_harvest_btn": "input tap 1314 733",
+                "special_feed_btn": "input tap 1080 733",
+                "item_names_list": "[['元气壮骨粉','益寿延珍粉','畅悦清润粉'], ['白玉萤肌膏','逐元润颜膏','玲珑泽面膏'],['贝壳粉','珍珠粉','藕粉'], ['无芯莲','裙边干','甲鱼壳'],['青染布','红染布','紫染布','黄染布'],['青染料','红染料','紫染料','黄染料'],['烤地瓜','烤土豆','烤豆腐','烤鸡翅','烤羊腿'], ['布娃娃','虎头帽','荷包','绣球'],['麻布','绒线','棉布','蚕丝线'],['南瓜籽','粉丝','干豆豉'],['砚','笔','纸'],['陶器','单色瓷','彩绘瓷'],['陶土','釉料','釉彩'],['竹蜻蜓','泥哨','竹板','陀螺'],['竹片','竹篓','麻绳','斗笠'],['糯米糕','鸡蛋糕','发糕','南瓜糕','马蹄糕'],['陶艺木具','榫卯','鲁班锁'],['油豆腐','腐竹','豆腐乳','豆筋','豆腐脑','豆腐干'],['咸鸡蛋','酸菜','腌鸡肉','腌土豆','腌羊肉'],['鸡蛋饼','烧饼','蔬菜饼','土豆饼','南瓜饼','地瓜饼'],['糖','红糖','麦糖'],['鸡饲料','羊饲料','蚕食'],['豆腐','豆浆','豆豉'],['面粉','糕粉','土豆粉','地瓜粉'],['蚕丝'],['羊毛','羊肉'],['鸡蛋','鸡肉']]",
+                "item_limits_list": "[[50, 50, 50], [50, 50, 50], [50, 50, 50], [50, 50, 50], [50, 50, 50, 50], [50, 50, 50, 50], [50, 50, 50, 50, 50], [50, 50, 50, 50], [50, 50, 50, 50], [50, 50, 50], [50, 50, 50], [50, 50, 50], [50, 50, 50], [50, 50, 50, 50], [50, 50, 50, 50], [50, 50, 50, 50, 50], [50, 50, 50], [50, 50, 50, 50, 50, 50], [50, 50, 50, 50, 50], [50, 50, 50, 50, 50, 50], [50, 50, 50], [50, 50, 50], [50, 50, 50], [50, 50, 50, 50], [50], [50, 50], [50, 50]]"
+            },
+            "enable": true
+        },
+        {
+            "id": 5,
+            "name": "任务 5",
+            "type": "4. 做菜 (智能点餐)",
+            "params": {
+                "area_adb": "input tap 875 122\nsleep 8",
+                "cook_btn_adb": "input tap 1256 770\nsleep 5\ninput tap 1256 770\n",
+                "quit_adb": "input tap 1486 45\nsleep 5",
+                "cook_batch_count": "3",
+                "dish_names_list": "['清汤白菜']",
+                "dish_reset_adbs_list": "['input swipe 1210 200 1210 880 2000\\nsleep 1\\ninput tap 1160 203\\nsleep 1']",
+                "dish_select_adbs_list": "['input tap 1160 203\\nsleep 1\\ninput swipe 1210 330 1210 230 1000\\nsleep 1\\ninput tap 1214 638\\nsleep 1']",
+                "dish_limits_list": "[50]"
+            },
+            "enable": true
+        },
+        {
+            "id": 6,
+            "name": "任务 6",
+            "type": "5. 订单 (自动交付)",
+            "params": {
+                "area_adb": "input tap 1273 829\nsleep 2",
+                "slot_select_adbs": "['input tap 285 430','input tap 405 430','input tap 530 430','input tap 660 430','input tap 780 430','input tap 900 430','input tap 1020 430','input tap 1140 430','input tap 1260 430','input tap 1380 430']",
+                "deliver_btn_adb": "input tap 1335 761",
+                "quit_adb": "input tap 1263 860"
+            },
+            "enable": true
+        },
+        {
+            "id": 7,
+            "name": "任务 7",
+            "type": "6. 蒲公英 (自动收发)",
+            "params": {
+                "area_adb": "input tap 1153 826\nsleep 2.5",
+                "harvest_btn_adb": "input tap 1424 725",
+                "fill_btn_adb": "input tap 1407 825",
+                "submit_btn_adb": "input tap 974 703",
+                "quit_adb": "input tap 100 224"
+            },
+            "enable": true
+        }
+    ]
+}
