@@ -71,12 +71,19 @@ class MainApp(tk.Tk):
 
         # --- [已删除] 第二组：自动化阈值 ---
 
-        # --- 第三组：延迟 ---
-        g_del = tk.LabelFrame(frame, text="延迟设置 (秒)", bg="white", font=("微软雅黑", 10, "bold"), padx=10, pady=10)
-        g_del.pack(fill=tk.X, pady=10)
-        self._input(g_del, "小延迟", "small_delay", 0, 0)
-        self._input(g_del, "大延迟", "big_delay", 0, 2)
 
+        # --- 第三组：运行控制 ---
+        # 建议把原来的 "延迟设置" 改名为 "运行控制 (延迟 & 循环)"
+        g_run = tk.LabelFrame(frame, text="运行控制 (延迟 & 循环)", bg="white", font=("微软雅黑", 10, "bold"), padx=10, pady=10)
+        g_run.pack(fill=tk.X, pady=10)
+        
+        self._input(g_run, "小延迟(s)", "small_delay", 0, 0)
+        self._input(g_run, "大延迟(s)", "big_delay", 0, 2)
+        
+        # === 新增这一行 ===
+        self._input(g_run, "循环总轮数", "loop_count", 1, 0)
+        tk.Label(g_run, text="(填9999即无限循环)", fg="gray", bg="white").grid(row=1, column=1, sticky="e", padx=5)
+        
         # === 复位坐标设置 ===
         g_reset = tk.LabelFrame(frame, text="复位逻辑坐标 (x y)", bg="white", font=("微软雅黑", 10, "bold"), padx=10, pady=10)
         g_reset.pack(fill=tk.X, pady=10)

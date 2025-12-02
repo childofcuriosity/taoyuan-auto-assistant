@@ -1,33 +1,28 @@
 # 文件: MyProject/src/logic.py
 import json
 import os
+import time
 from src.tasks import SCRIPT_REGISTRY
+
 class AppLogic:
     def __init__(self):
         self.data_file = "data.json"
         
-        # === 1. 定义默认全局配置 ===
+        # === 定义默认全局配置 ===
         self.config = {
-            # --- 基础连接 ---
             "window_name": "MuMu安卓设备",
             "adb_path": r"C:\Program Files\Netease\MuMu\nx_main\adb.exe",
             "OPENAI_API_KEY": "",
             
-            # --- 数量限制 ---
-            "plant_num_limit": "20",
-            "produce_num_limit": "8",
-            "plant_num_sale": "40",
-            "produce_num_sale": "10",
+            # --- 新增：循环次数 ---
+            "loop_count": "1",
             
-            # --- 延迟设置 ---
             "small_delay": "1.5",
             "big_delay": "8",
-
-            # === 新增：复位逻辑坐标 (空格分隔 x y) ===
-            "reset_pos_order": "1273 829",       # 订单图标
-            "reset_pos_exit_order": "1263 860",  # 退出订单
-            "reset_pos_dandelion": "1153 826",   # 蒲公英图标
-            "reset_pos_exit_dandelion": "100 224" # 退出蒲公英
+            "reset_pos_order": "1273 829",
+            "reset_pos_exit_order": "1263 860",
+            "reset_pos_dandelion": "1153 826",
+            "reset_pos_exit_dandelion": "100 224"
         }
         
         self.tasks = []
@@ -131,12 +126,31 @@ class AppLogic:
             return f"[{task['name']}] 执行完毕"
         except Exception as e:
             return f"执行出错: {e}"
-            
+        
     def run_all_tasks(self):
         self.apply_config_to_env()
-        count = 0
-        for i, t in enumerate(self.tasks):
-            if t["enable"]:
-                self.run_single_task(i)
-                count += 1
-        return f"已执行 {count} 个任务"
+        
+        # 获取循环次数
+        try:
+            total_loops = int(self.config.get("loop_count", "1"))
+        except:
+            total_loops = 1
+            
+        print(f"=== 计划执行 {total_loops} 轮循环 ===")
+        
+        executed_count = 0
+        
+        for cycle in range(total_loops):
+            print(f"\n>>> 正在执行第 {cycle + 1} / {total_loops} 轮 ...")
+            
+            for i, t in enumerate(self.tasks):
+                if t["enable"]:
+                    self.run_single_task(i)
+                    executed_count += 1
+            
+            # 轮次间休息，避免过热 (最后一轮不休)
+            if cycle < total_loops - 1:
+                print(">>> 本轮结束，等待 5 秒...")
+                time.sleep(5)
+
+        return f"全部完成！共执行 {total_loops} 轮。"

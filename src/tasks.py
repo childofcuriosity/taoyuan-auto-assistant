@@ -154,7 +154,12 @@ class FarmingTask(GameScriptBase):
             "type": "string",
             "default": "168 772"
         },
-        
+        "close_seed_bar_adb": {
+            "label": "无需播种时关闭动作 (通常点击空地)",
+            "type": "text",
+            # 默认点击屏幕上方空白处，通常能关闭底部栏
+            "default": "sleep 1\ninput tap 300 300\nsleep 1" 
+        },
         # === 动作轨迹配置 ===
         "sickle_pos": {
             "label": "镰刀位置 (x y)",
@@ -347,6 +352,8 @@ class FarmingTask(GameScriptBase):
                 
             else:
                 self.log("库存充足")
+                # === 关键修改：执行关闭动作 ===
+                execute_multiline_adb(self.params.get("close_seed_bar_adb"))
 
         except Exception as e:
             self.log(f"决策出错: {e}")
