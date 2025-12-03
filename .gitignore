@@ -10,6 +10,7 @@ venv/
 *.png
 *.log
 *.mks
+*.json
 
 # === PyInstaller 打包生成 (新增) ===
 # build 和 dist 文件夹是生成的垃圾和结果，不上传
@@ -24,7 +25,7 @@ dist/
 
 # === 本地配置与个人文件 ===
 # 用户存档，不上传 (data.json 是本地运行生成的)
-data.json
+!最终参数.json
 # 个人笔记
 想法.md
 
