@@ -108,9 +108,13 @@ def run_adb_cmd(cmd_list):
     except Exception as e:
         print(f"【ADB错误】{e}")
         return ""
+# 文件: MyProject/src/adb_utils.py
 
-def adb_screenshot(path="adb_screen.png"):
-    """截图 (适配多设备)"""
+def adb_screenshot(path="adb_screen.png", crop_box=None):
+    """
+    截图 (适配多设备)
+    crop_box: (left, top, right, bottom) 传入元组则裁剪，不传则全图
+    """
     adb_path = get_adb_path()
     device_id = auto_select_device()
     
@@ -118,27 +122,29 @@ def adb_screenshot(path="adb_screen.png"):
     cmd = [adb_path]
     if device_id:
         cmd.extend(["-s", device_id])
-    cmd.extend(["exec-out", "screencap", "-p"]) # -p 生成 PNG 格式
+    cmd.extend(["exec-out", "screencap", "-p"]) 
     
     try:
         result = subprocess.run(cmd, stdout=subprocess.PIPE)
         
-        # 检查是否是 PNG 图片头 (89 50 4E 47)
         if not result.stdout.startswith(b"\x89PNG"):
-            print(f"【截图失败】返回数据异常 (可能设备离线): {result.stdout[:50]}")
-            # 如果截图失败，可能是设备断了，重置 ID 让下次自动重连
+            print(f"【截图失败】数据异常: {result.stdout[:20]}")
             global CURRENT_DEVICE_ID
             CURRENT_DEVICE_ID = None 
             return None
 
-        # 保存图片
         img = Image.open(BytesIO(result.stdout))
+        
+        # === 新增：裁剪逻辑 ===
+        if crop_box:
+            # crop_box 格式 (x1, y1, x2, y2)
+            img = img.crop(crop_box)
+            
         img.save(path)
         return path
     except Exception as e:
         print(f"【截图异常】{e}")
         return None
-
 # ================= 核心：解析执行多行指令 =================
 
 def execute_multiline_adb(text_block):

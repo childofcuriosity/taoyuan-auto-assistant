@@ -396,6 +396,12 @@ class GatheringTask(GameScriptBase):
             "default": "['input tap 1040 206', 'input tap 1160 206', 'input tap 1280 206', 'input tap 1400 206']"
         },
 
+        # === 新增：截图裁剪配置 ===
+        "digit_crop_box": {
+            "label": "库存数字截图裁剪区域 [x1, y1, x2, y2]",
+            "type": "string", # string 类型也就是单行文本框
+            "default": "[1060, 394, 1160, 464]"
+        },
         # === 业务配置 ===
         "item_names_list": {
             "label": "各林地作物名称 [['松木'], ['竹子']...]",
@@ -496,7 +502,10 @@ class GatheringTask(GameScriptBase):
         current_counts = []
         # 安全检查
         loop_len = min(len(names), len(selects))
-        
+        crop_list = self.parse_list_from_text("digit_crop_box")
+        crop_box = tuple(crop_list) if len(crop_list) == 4 else None
+        if crop_box is None:
+            self.log("警告：裁剪参数格式错误，将使用全图识别")
         for k in range(loop_len):
             item_name = names[k]
             select_cmd = selects[k]
@@ -507,12 +516,19 @@ class GatheringTask(GameScriptBase):
             
             # 2. 截图
             img_name = f"item_{k}.png"
-            adb_screenshot(img_name)
+            adb_screenshot(img_name, crop_box=crop_box)
             
-            # 3. AI 读数
-            prompt = f"图中显示了'{item_name}'的详情。请读取中间显示的当前库存数量（通常在图片右边的仓库图标右边时钟图标左边铜钱图标上边大数字，例如'142'）。只返回纯数字。"
+            # 提示词：读取中间显示的库存
+            prompt = (
+                f"这是'{item_name}'的库存数字特写。请识别图中的纯数字整数。"
+                f"【重要规则】图片中只有数字，**绝对没有英文字母**！"
+                f"如果你看到圆圈形状（如 'o', 'O'），请务必将其识别为数字 '0'。"
+                f"如果存在斜杠 '/' 及其后面的数字（如 '54/1'），请忽略斜杠部分，只读前面的库存数。"
+            )
+            
             ai_res = query_vlm(img_name, prompt)
-            
+                        # === 新增：暴力清洗数据，把 o/O 变回 0 ===
+            ai_res = ai_res.replace('o', '0').replace('O', '0')
             try:
                 import re
                 nums = re.findall(r'\d+', ai_res)
@@ -601,6 +617,12 @@ class ProcessingTask(GameScriptBase):
             "label": "Type0: 开始制作按钮",
             "type": "text",
             "default": "input tap 1300 760"
+        },
+        # === 新增：Type 0 截图裁剪配置 ===
+        "normal_digit_crop_box": {
+            "label": "Type0: 库存数字截图裁剪区域 [x1, y1, x2, y2]",
+            "type": "string",
+            "default": "[1035, 530, 1135, 600]"
         },
 
         # === [Type 1] 特殊工坊配置 ===
@@ -692,6 +714,9 @@ class ProcessingTask(GameScriptBase):
         
         # 安全检查
         item_count = min(len(names), len(slot_adbs))
+        # === 修改点：从参数读取裁剪区域 ===
+        crop_list = self.parse_list_from_text("normal_digit_crop_box")
+        crop_box = tuple(crop_list) if len(crop_list) == 4 else None
         
 
         for k in range(item_count):
@@ -701,12 +726,18 @@ class ProcessingTask(GameScriptBase):
             
             # 截图并识别
             img_name = f"factory_item_{k}.png"
-            adb_screenshot(img_name)
+            adb_screenshot(img_name, crop_box=crop_box)
             
             # 提示词：读取中间显示的库存
-            prompt =  f"图中显示了'{names[k]}'的详情。请读取中间显示的当前库存数量（通常在图片右边的仓库图标右边时钟图标左边大数字，例如'142'）。只返回纯数字。"
-
+            prompt = (
+                f"这是'{names[k]}'的库存数字特写。请识别图中的纯数字整数。"
+                f"【重要规则】图片中只有数字，**绝对没有英文字母**！"
+                f"如果你看到圆圈形状（如 'o', 'O'），请务必将其识别为数字 '0'。"
+                f"如果存在斜杠 '/' 及其后面的数字（如 '54/1'），请忽略斜杠部分，只读前面的库存数。"
+            )
             res = query_vlm(img_name, prompt)
+                        # === 新增：暴力清洗数据，把 o/O 变回 0 ===
+            res = res.replace('o', '0').replace('O', '0')
             
             try:
                 import re
