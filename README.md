@@ -30,9 +30,10 @@ v2.1 增加识别能力：优化Prompt与裁剪参数
 3.  **自定义位置**：所有点击坐标、滑动轨迹均可在界面中自由配置，适配不同机型。
 
 ---
-## 🎬 Demo 演示
+## 🎬 Demo 演示和教程
 
 📺 **[点此播放视频 Demo](https://www.bilibili.com/video/BV1jkStBwEyh)**
+📺 **[点此播放视频 教程](https://www.bilibili.com/video/BV1XrSYBTETe/)**
 ## ✨ 核心功能
 
 ### 1. 🌾 智能种田

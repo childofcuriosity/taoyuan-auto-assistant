@@ -629,7 +629,7 @@ class ProcessingTask(GameScriptBase):
         "special_harvest_btn": {
             "label": "Type1: 收获按钮 (捡蛋/收蜜)",
             "type": "text",
-            "default": "input tap 1314 733"
+            "default": "input tap 1314 733\nsleep 1\ninput tap 1314 667"
         },
         "special_feed_btn": {
             "label": "Type1: 喂食/添加按钮",
