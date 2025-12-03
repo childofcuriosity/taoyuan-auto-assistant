@@ -826,62 +826,49 @@ class ProcessingTask(GameScriptBase):
         except Exception as e:
             self.log(f"特殊工坊识别出错: {e}")
 class CookingTask(GameScriptBase):
-    LABEL = "4. 做菜 (智能点餐)"
+    LABEL = "4. 做菜(固定位置/盲盒模式)"
     
     PARAM_CONFIG = {
-        # === 基础操作 ===
-        "area_adb": {
-            # 这里增加了醒目的提示
-            "label": "进入厨房 (★运行前请确保：所有菜谱分类处于折叠状态★)",
-            "type": "text",
-            "default": "input tap 875 122\nsleep 8"
-        },
-        "cook_btn_adb": {
-            "label": "开始/快速烹饪按钮ADB,包括等待动画",
-            "type": "text",
-            "default": "input tap 1256 770\nsleep 5\ninput tap 1256 770\n"
-        },
-        "quit_adb": {
-            "label": "退出界面ADB",
-            "type": "text", 
-            "default": "input tap 1486 45\nsleep 5"
-        },
+            # === 基础操作 ===
+            "area_adb": {
+                "label": "进入厨房 (★运行前请确保：所有菜谱分类处于折叠状态★)",
+                "type": "text",
+                "default": "input tap 875 122\nsleep 8"
+            },
+            "cook_btn_adb": {
+                "label": "开始/快速烹饪按钮ADB,包括等待动画",
+                "type": "text",
+                "default": "input tap 1256 770\nsleep 5\ninput tap 1256 770\n"
+            },
+            "quit_adb": {
+                "label": "退出界面ADB",
+                "type": "text", 
+                "default": "input tap 1486 45\nsleep 5"
+            },
 
-        # === 统一参数 ===
-        "cook_batch_count": {
-            "label": "单次制作次数 (缺货时连点多少下)",
-            "type": "int",
-            "default": "3"
-        },
-
-        # === 菜谱配置 (三个平行列表) ===
-        "dish_names_list": {
-            "label": "菜品名称列表",
-            "type": "text",
-            "default": "['清汤白菜']"
-        },
-        
-        # 新增：每道菜独立的复位/预处理操作
-        "dish_reset_adbs_list": {
-            "label": "单菜品复位ADB (做这道菜后执行的操作，复原全折叠状态,注意做菜带来的位置偏移)",
-            "type": "text",
-            # 例如：做清汤白菜，可能需要点击一下折叠按钮
-            "default": "['input swipe 1210 200 1210 880 2000\\nsleep 1\\ninput tap 1160 203\\nsleep 1']" 
-        },
-        
-        "dish_select_adbs_list": {
-            "label": "单菜品选中ADB (点开分类 -> 选中菜品)",
-            "type": "text",
-            # 这里填你刚才测试好的选中逻辑
-            "default": "['input tap 1160 203\\nsleep 1\\ninput swipe 1210 330 1210 230 1000\\nsleep 1\\ninput tap 1214 638\\nsleep 1']"
-        },
-        
-        "dish_limits_list": {
-            "label": "菜品库存上限",
-            "type": "text",
-            "default": "[50]"
+            # === 统一参数 ===
+            "cook_batch_count": {
+                "label": "单次制作次数 (缺货时连点多少下)",
+                "type": "int",
+                "default": "1"
+            },
+            
+            # === 核心配置：位置遍历 ===
+            "position_adbs_list": {
+                "label": "位置遍历列表 ADB (依次点击屏幕上的格子)",
+                "type": "text",
+                "default": "['input tap 1160 203\\nsleep 1\\ninput tap 1160 300\\nsleep 1', 'input tap 1160 203\\nsleep 1\\ninput tap 1160 406\\nsleep 1',  'input tap 1160 203\\nsleep 1\\ninput tap 1160 525\\nsleep 1',  'input tap 1160 203\\nsleep 1\\ninput tap 1160 656\\nsleep 1' ]",
+                "help": "请填入点击不同菜品位置的指令。脚本将按顺序执行。"
+            },
+            
+            "dish_reset_adbs_list": {
+                "label": "位置复位列表 ADB (做完该位置的菜后，如何返回/关闭弹窗)",
+                "type": "text",
+                # 注意：下面这行末尾改成了逗号
+                "default": "['input swipe 1210 200 1210 880 2000\\nsleep 1\\ninput tap 1160 186\\nsleep 1','input swipe 1210 200 1210 880 2000\\nsleep 1\\ninput tap 1160 186\\nsleep 1','input swipe 1210 200 1210 880 2000\\nsleep 1\\ninput tap 1160 186\\nsleep 1','input swipe 1210 200 1210 880 2000\\nsleep 1\\ninput tap 1160 186\\nsleep 1']",
+                "help": "重要：做完菜后通常需要关闭详情页或弹窗，才能点击下一个位置。请确保此列表长度与位置列表一致。"
+            }
         }
-    }
 
     def parse_list_from_text(self, key):
         raw = self.params.get(key, "[]").strip()
@@ -892,67 +879,50 @@ class CookingTask(GameScriptBase):
             return []
 
     def execute(self):
-        
-        # 2. 解析参数
-        names = self.parse_list_from_text("dish_names_list")
-        resets = self.parse_list_from_text("dish_reset_adbs_list") # 新增
-        selects = self.parse_list_from_text("dish_select_adbs_list")
-        limits = self.parse_list_from_text("dish_limits_list")
+        # 1. 解析参数
+        pos_adbs = self.parse_list_from_text("position_adbs_list")
+        reset_adbs = self.parse_list_from_text("dish_reset_adbs_list")
         
         cook_btn = self.params.get("cook_btn_adb")
         batch_count = int(self.params.get("cook_batch_count", 1))
-
-        # 3. 循环处理每一个菜
-        # 只有当名字、复位、选中、限制 4个列表都有值时才执行
-        loop_len = min(len(names), len(selects), len(resets), len(limits))
         
-        for i in range(loop_len):
-            name = names[i]
-            limit = limits[i]
-            select_cmd = selects[i]
-            
-            
-            # 3.2 执行选菜动作
-            self.log(f"执行选菜...")
-            execute_multiline_adb(select_cmd)
-            time.sleep(self.s_delay) # 等待选中高亮
-            
-            # 3.3 截图识别
-            img_name = f"dish_{i}.png"
-            adb_screenshot(img_name)
-            
-            # VLM 提示词
-            prompt = f"请查看截图中被黄色/金色背景高亮选中的菜谱'{name}'。读取该菜谱名称下方、小袋子图标旁边的库存数量。只返回纯数字。"
-            
-            res = query_vlm(img_name, prompt)
-            try:
-                import re
-                nums = re.findall(r'\d+', res)
-                curr_count = int(nums[0]) if nums else 9999
-            except:
-                curr_count = 9999
-            
-            self.log(f"[{name}] 库存: {curr_count} / 上限: {limit}")
+        # 3. 循环遍历
+        # 以位置列表长度为准
+        total_steps = len(pos_adbs)
+        if total_steps == 0:
+            self.log("未配置位置列表，任务结束")
+            return
 
-            # 3.4 决策制作
-            if curr_count < limit:
-                self.log(f"库存不足，执行烹饪 ({batch_count}次)...")
-                for _ in range(batch_count):
-                    execute_multiline_adb(cook_btn)
-                    time.sleep(self.s_delay) 
-            else:
-                self.log("库存充足，跳过")
+        self.log(f"开始任务：共遍历 {total_steps} 个位置，单次制作 {batch_count} 份")
+
+        for i in range(total_steps):
+            # 获取当前步骤的指令
+            curr_pos_cmd = pos_adbs[i]
+            # 获取对应的复位指令，防止索引越界
+            curr_reset_cmd = reset_adbs[i] if i < len(reset_adbs) else ""
             
-            # 获取对应的复位指令，防止越界（虽然 loop_len 限制了，但为了稳健）
-            reset_cmd = resets[i] if i < len(resets) else ""
+            self.log(f"--- 步骤 [{i+1}/{total_steps}] ---")
             
-            self.log(f"--- 检查菜品 [{i+1}/{loop_len}]: {name} ---")
+            # 3.1 选中位置
+            self.log(f"执行位置选中...")
+            execute_multiline_adb(curr_pos_cmd)
+            time.sleep(self.s_delay)
             
-            # 3.1 执行该菜品的独立复位/预处理
-            if reset_cmd:
-                self.log(f"执行预处理/复位...")
-                execute_multiline_adb(reset_cmd)
+            # 3.2 盲做
+            self.log(f"执行烹饪 ({batch_count}次)...")
+            for k in range(batch_count):
+                execute_multiline_adb(cook_btn)
+                # 如果 cook_btn 里面包含等待动画的时间，这里 sleep 可以短一点，否则建议给足时间
+                time.sleep(self.s_delay) 
+
+            # 3.3 复位 (关键步骤)
+            if curr_reset_cmd:
+                self.log(f"执行复位/收尾...")
+                execute_multiline_adb(curr_reset_cmd)
                 time.sleep(self.s_delay)
+            else:
+                self.log("警告：该位置未配置复位指令，可能影响后续操作")
+
 class OrderTask(GameScriptBase):
     LABEL = "5. 订单 (自动交付)"
     

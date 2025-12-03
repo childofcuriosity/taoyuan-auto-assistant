@@ -13,7 +13,7 @@
         "reset_pos_exit_order": "1263 860",
         "reset_pos_dandelion": "1153 826",
         "reset_pos_exit_dandelion": "100 224",
-        "loop_count": "2"
+        "loop_count": "99"
     },
     "tasks": [
         {
@@ -67,7 +67,7 @@
                 "quit_adb": "input tap 763 798",
                 "location_count": "3",
                 "slot_adbs": "['input tap 1040 206', 'input tap 1160 206', 'input tap 1280 206', 'input tap 1400 206']",
-	"digit_crop_box":"[1060, 394, 1160, 464]",
+                "digit_crop_box": "[1060, 394, 1160, 464]",
                 "item_names_list": "[['木材'], ['青竹'], ['原始土','矿料']]",
                 "item_limits_list": "[[100], [100], [100, 100]]"
             },
@@ -86,7 +86,7 @@
                 "normal_slot_adbs": "['input tap 1050 220', 'input tap 1160 220', 'input tap 1260 220', 'input tap 1360 220', 'input tap 1050 320', 'input tap 1160 320', 'input tap 1260 320', 'input tap 1360 320']",
                 "normal_harvest_adb": "input tap 840 815\nsleep 1\ninput tap 1165 550\nsleep 1\ninput tap 710 815\nsleep 1\ninput tap 1165 550\nsleep 1\ninput tap 587 815\nsleep 1\ninput tap 1165 550\nsleep 1\ninput tap 463 815\nsleep 1\ninput tap 1165 550\nsleep 1\ninput tap 331 815\nsleep 1\ninput tap 1165 550\nsleep 1\ninput tap 223 815\nsleep 1\ninput tap 1165 550\nsleep 1\n",
                 "normal_produce_btn": "input tap 1300 760",
-	"normal_digit_crop_box": "[1035, 530, 1135, 600]",
+                "normal_digit_crop_box": "[1035, 530, 1135, 600]",
                 "special_harvest_btn": "input tap 1314 733",
                 "special_feed_btn": "input tap 1080 733",
                 "item_names_list": "[['元气壮骨粉','益寿延珍粉','畅悦清润粉'], ['白玉萤肌膏','逐元润颜膏','玲珑泽面膏'],['贝壳粉','珍珠粉','藕粉'], ['无芯莲','裙边干','甲鱼壳'],['青染布','红染布','紫染布','黄染布'],['青染料','红染料','紫染料','黄染料'],['烤地瓜','烤土豆','烤豆腐','烤鸡翅','烤羊腿'], ['布娃娃','虎头帽','荷包','绣球'],['麻布','绒线','棉布','蚕丝线'],['南瓜籽','粉丝','干豆豉'],['砚','笔','纸'],['陶器','单色瓷','彩绘瓷'],['陶土','釉料','釉彩'],['竹蜻蜓','泥哨','竹板','陀螺'],['竹片','竹篓','麻绳','斗笠'],['糯米糕','鸡蛋糕','发糕','南瓜糕','马蹄糕'],['陶艺木具','榫卯','鲁班锁'],['油豆腐','腐竹','豆腐乳','豆筋','豆腐脑','豆腐干'],['咸鸡蛋','酸菜','腌鸡肉','腌土豆','腌羊肉'],['鸡蛋饼','烧饼','蔬菜饼','土豆饼','南瓜饼','地瓜饼'],['糖','红糖','麦糖'],['鸡饲料','羊饲料','蚕食'],['豆腐','豆浆','豆豉'],['面粉','糕粉','土豆粉','地瓜粉'],['蚕丝'],['羊毛','羊肉'],['鸡蛋','鸡肉']]",
@@ -97,16 +97,14 @@
         {
             "id": 5,
             "name": "任务 5",
-            "type": "4. 做菜 (智能点餐)",
+            "type": "4. 做菜(固定位置/盲盒模式)",
             "params": {
                 "area_adb": "input tap 875 122\nsleep 8",
                 "cook_btn_adb": "input tap 1256 770\nsleep 5\ninput tap 1256 770\n",
                 "quit_adb": "input tap 1486 45\nsleep 5",
-                "cook_batch_count": "3",
-                "dish_names_list": "['清汤白菜']",
-                "dish_reset_adbs_list": "['input swipe 1210 200 1210 880 2000\\nsleep 1\\ninput tap 1160 203\\nsleep 1']",
-                "dish_select_adbs_list": "['input tap 1160 203\\nsleep 1\\ninput swipe 1210 330 1210 230 1000\\nsleep 1\\ninput tap 1214 638\\nsleep 1']",
-                "dish_limits_list": "[50]"
+                "cook_batch_count": "1",
+                "position_adbs_list": "['input tap 1160 203\\nsleep 1\\ninput tap 1160 300\\nsleep 1', 'input tap 1160 203\\nsleep 1\\ninput tap 1160 406\\nsleep 1',  'input tap 1160 203\\nsleep 1\\ninput tap 1160 525\\nsleep 1',  'input tap 1160 203\\nsleep 1\\ninput tap 1160 656\\nsleep 1' ]",
+                "dish_reset_adbs_list": "['input swipe 1210 200 1210 880 2000\\nsleep 1\\ninput tap 1160 186\\nsleep 1','input swipe 1210 200 1210 880 2000\\nsleep 1\\ninput tap 1160 186\\nsleep 1','input swipe 1210 200 1210 880 2000\\nsleep 1\\ninput tap 1160 186\\nsleep 1','input swipe 1210 200 1210 880 2000\\nsleep 1\\ninput tap 1160 186\\nsleep 1']"
             },
             "enable": true
         },
