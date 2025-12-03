@@ -137,8 +137,19 @@ class MainApp(tk.Tk):
         # 顶部栏
         top = tk.Frame(self.content_area, bg="white")
         top.pack(fill=tk.X, padx=20, pady=10)
-        tk.Button(top, text="+ 新建任务", bg="#28a745", fg="white", command=self.add_task).pack(side=tk.LEFT)
-        tk.Button(top, text="▶ 全部启动", bg="#007bff", fg="white", command=self.run_all).pack(side=tk.LEFT, padx=10)
+        
+        # 1. 新建任务
+        tk.Button(top, text="+ 新建任务", bg="#28a745", fg="white", 
+                  command=self.add_task).pack(side=tk.LEFT)
+        
+        # 2. 全部启动
+        tk.Button(top, text="▶ 全部启动", bg="#007bff", fg="white", 
+                  command=self.run_all).pack(side=tk.LEFT, padx=10)
+
+        # === 3. 新增：保存按钮 ===
+        # 复用已有的 save_config_manual 方法，它会强制失去焦点并写入文件
+        tk.Button(top, text="💾 保存配置", bg="#6c757d", fg="white", 
+                  command=self.save_config_manual).pack(side=tk.LEFT, padx=0)
 
         # 滚动列表
         canvas = tk.Canvas(self.content_area, bg="white", highlightthickness=0)
