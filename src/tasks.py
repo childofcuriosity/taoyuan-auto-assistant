@@ -419,24 +419,16 @@ class GatheringTask(GameScriptBase):
         }
     }
 
-    def parse_list_from_text(self, key):
-        raw = self.params.get(key, "[]").strip()
-        try:
-            return ast.literal_eval(raw)
-        except:
-            self.log(f"参数 {key} 解析失败")
-            return []
-
     def execute(self):
         count = int(self.params.get("location_count", 1))
         nav = self.params.get("nav_adb").strip()
         
         # 1. 解析全局格子配置
-        master_slots = self.parse_list_from_text("slot_adbs")
+        master_slots = self.parse_list("slot_adbs")
         
         # 2. 解析业务数据
-        names_group = self.parse_list_from_text("item_names_list")
-        limits_group = self.parse_list_from_text("item_limits_list")
+        names_group = self.parse_list("item_names_list")
+        limits_group = self.parse_list("item_limits_list")
         
         for i in range(count):
             self.log(f"--- 正在处理第 {i+1}/{count} 个林地 ---")
@@ -502,7 +494,7 @@ class GatheringTask(GameScriptBase):
         current_counts = []
         # 安全检查
         loop_len = min(len(names), len(selects))
-        crop_list = self.parse_list_from_text("digit_crop_box")
+        crop_list = self.parse_list("digit_crop_box")
         crop_box = tuple(crop_list) if len(crop_list) == 4 else None
         if crop_box is None:
             self.log("警告：裁剪参数格式错误，将使用全图识别")
@@ -650,13 +642,6 @@ class ProcessingTask(GameScriptBase):
         }
     }
 
-    def parse_list_from_text(self, key):
-        raw = self.params.get(key, "[]").strip()
-        try:
-            return ast.literal_eval(raw)
-        except:
-            self.log(f"参数 {key} 解析失败")
-            return []
 
     def execute(self):
 
@@ -664,12 +649,12 @@ class ProcessingTask(GameScriptBase):
         count = int(self.params.get("location_count", 27))
         nav_cmd = self.params.get("nav_adb").strip()
         
-        ui_types = self.parse_list_from_text("ui_types")
-        names_group = self.parse_list_from_text("item_names_list")
-        limits_group = self.parse_list_from_text("item_limits_list")
+        ui_types = self.parse_list("ui_types")
+        names_group = self.parse_list("item_names_list")
+        limits_group = self.parse_list("item_limits_list")
         
         # 预加载物理坐标
-        normal_slots = self.parse_list_from_text("normal_slot_adbs")
+        normal_slots = self.parse_list("normal_slot_adbs")
 
         # 3. 开始倒序/正序循环 (根据你的 nav 是向前还是向后，这里按你的逻辑是向左切)
         for i in range(count):
@@ -715,7 +700,7 @@ class ProcessingTask(GameScriptBase):
         # 安全检查
         item_count = min(len(names), len(slot_adbs))
         # === 修改点：从参数读取裁剪区域 ===
-        crop_list = self.parse_list_from_text("normal_digit_crop_box")
+        crop_list = self.parse_list("normal_digit_crop_box")
         crop_box = tuple(crop_list) if len(crop_list) == 4 else None
         
 
@@ -870,18 +855,10 @@ class CookingTask(GameScriptBase):
             }
         }
 
-    def parse_list_from_text(self, key):
-        raw = self.params.get(key, "[]").strip()
-        try:
-            return ast.literal_eval(raw)
-        except:
-            self.log(f"参数 {key} 解析失败")
-            return []
-
     def execute(self):
         # 1. 解析参数
-        pos_adbs = self.parse_list_from_text("position_adbs_list")
-        reset_adbs = self.parse_list_from_text("dish_reset_adbs_list")
+        pos_adbs = self.parse_list("position_adbs_list")
+        reset_adbs = self.parse_list("dish_reset_adbs_list")
         
         cook_btn = self.params.get("cook_btn_adb")
         batch_count = int(self.params.get("cook_batch_count", 1))
@@ -958,17 +935,9 @@ class OrderTask(GameScriptBase):
         },
     }
 
-    def parse_list_from_text(self, key):
-        raw = self.params.get(key, "[]").strip()
-        try:
-            return ast.literal_eval(raw)
-        except:
-            self.log(f"参数 {key} 解析失败")
-            return []
-
     def execute(self):
         # 1. 解析参数
-        slots = self.parse_list_from_text("slot_select_adbs")
+        slots = self.parse_list("slot_select_adbs")
         deliver_cmd = self.params.get("deliver_btn_adb")
         
         self.log(f"开始处理订单，共 {len(slots)} 个栏位")
