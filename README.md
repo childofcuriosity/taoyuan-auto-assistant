@@ -14,6 +14,8 @@
   <img src="https://img.shields.io/badge/AI-Zhipu%20GLM--4V-purple"/>
 </p>
 
+关键词：桃源深处有人家辅助、自动收菜、挂机脚本、Python自动化、安卓模拟器脚本。
+
 ---
 ## 📢 V2.2 版本更新重点
 v2.2 针对做菜位置随机做出逻辑调整
