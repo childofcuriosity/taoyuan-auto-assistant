@@ -214,7 +214,7 @@ class FarmingTask(GameScriptBase):
     def execute(self):
         # 1. 点击田地
         
-        # 2. 状态判断
+        # 2. 状态判断 
         screenshot_path = "farm_state.png"
         adb_screenshot(screenshot_path)
         
