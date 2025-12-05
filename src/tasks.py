@@ -160,6 +160,13 @@ class FarmingTask(GameScriptBase):
             # 默认点击屏幕上方空白处，通常能关闭底部栏
             "default": "sleep 1\ninput tap 300 300\nsleep 1" 
         },
+        # === 核心：AI 提示词增强 ===
+        "crop_prompt_names": {
+            "label": "作物名称提示 (用于辅助AI识别顺序，用逗号分隔)",
+            "type": "text",
+            # 这里填你希望告诉 AI 的顺序
+            "default": "小麦，大豆，甘蔗，水稻，白菜，辣椒，土豆，苎麻, 棉花, 南瓜, 红薯" 
+        },
         # === 动作轨迹配置 ===
         "sickle_pos": {
             "label": "镰刀位置 (x y)",
@@ -274,8 +281,10 @@ class FarmingTask(GameScriptBase):
         split_r = int(self.params.get("stitch_right_x", 0))
         stitch_images(img_left, img_right, img_stitched, split_l, split_r)
         
-        # AI 识别
-        count_prompt = "请读取底部作物栏的库存数字，返回纯数字列表: [x, x, ...]"
+        # AI 识别        
+        crop_names_str = self.params.get("crop_prompt_names", "")
+        # 2. 构造 Prompt，使用 f-string {crop_names_str} 插入变量
+        count_prompt = f"请读取底部作物栏的库存数字，依次是[{crop_names_str}]，返回纯数字列表: [x, x, ...]"        
         ai_res = query_vlm(img_stitched, count_prompt)
         self.log(f"AI读取库存: {ai_res}")
         

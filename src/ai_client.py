@@ -71,7 +71,7 @@ def query_vlm(image_path: str, prompt: str, model: str = 'glm-4v-flash'):
     输入：图片路径、提示词
     输出：大模型的文本回答
     """
-    print(f"【AI调用】正在询问图片: {prompt[:20]}...") # 只打印前20个字，防止日志太长
+    print(f"【AI调用】正在询问图片: {prompt}") # 只打印前20个字，防止日志太长
     
     try:
         # 1. 获取新客户端
