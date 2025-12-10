@@ -2,7 +2,7 @@
 <p align="center">
   <img src="mascot.png" width="200" alt="桃源自动小助手">
 </p>
-<h1 align="center">🍃 桃源深处有人家 - 自动运营助手 (V2.2)</h1>
+<h1 align="center">🍃 桃源深处有人家 - 自动运营助手 (V2.3)</h1>
 
 <p align="center">
   基于 <strong>模拟器控制</strong> + <strong>视觉大模型</strong> 的无人值守自动化运营系统
