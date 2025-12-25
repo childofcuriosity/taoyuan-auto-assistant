@@ -45,8 +45,10 @@ v2.1 增加识别能力：优化Prompt与裁剪参数
 
 📺 **[点此播放视频 Demo](https://www.bilibili.com/video/BV1jkStBwEyh)**
 📺 **[点此播放视频 教程](https://www.bilibili.com/video/BV1XrSYBTETe/)**
+📺 **[点此播放视频 教程 v2.5新功能部分](https://www.bilibili.com/video/BV1f3BXBuEYX/)**
 📘 **[源代码文字解析（知乎）](https://zhuanlan.zhihu.com/p/1980082268472107335)**
 📺 **[源代码视频解析（B站）](https://www.bilibili.com/video/BV1Dt2BB6Esu)**
+
 
 ## ✨ 核心功能
 
