@@ -32,3 +32,5 @@ dist/
 # === 其他文件夹 ===
 old/
 assets/
+dump_py.py
+all_py_dump.txt

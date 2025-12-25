@@ -1026,6 +1026,106 @@ class DandelionTask(GameScriptBase):
         self.log("动作: 点击确认提交")
         execute_multiline_adb(self.params.get("submit_btn_adb"))
         time.sleep(self.s_delay) # 等待提交动画
+
+class WarehouseSaleTask(GameScriptBase):
+    LABEL = "7. 仓库自动售卖"
+
+    PARAM_CONFIG = {
+        # === 1. 进场导航 (对应你的：选中仓库 -> 点击分类) ===
+        # Base类会自动在复位后执行 area_adb
+        "area_adb": {
+            "label": "进场ADB (点击仓库 -> 点击分类)",
+            "type": "text",
+            "default": "input tap 1590 379\nsleep 2\ninput tap 1420 444\nsleep 1.5"
+        },
+
+        # === 2. 识别配置 (对应你的：识别框) ===
+        "digit_crop_box": {
+            "label": "数字识别框 [x1, y1, x2, y2]",
+            "type": "string",
+            "default": "[290, 382, 365, 412]"
+        },
+        
+        # === 3. 判断条件 (对应你的：超过多少就卖) ===
+        "sell_threshold": {
+            "label": "售卖阈值 (库存 > 此数 则卖)",
+            "type": "int",
+            "default": "50"
+        },
+
+        # === 4. 售卖动作 (对应你的：卖的操作参数) ===
+        "sell_action_adb": {
+            "label": "售卖动作ADB (满足条件时执行)",
+            "type": "text",
+            "default": "input tap 339 328\nsleep 1\ninput tap 332 628\nsleep 1\ninput tap 957 622\nsleep 2"
+        },
+
+        # === 5. 退场 (对应你的：退场参数) ===
+        # Base类会自动在 execute 执行完后调用 quit_adb
+        "quit_adb": {
+            "label": "退场ADB (点击关闭/返回)",
+            "type": "text", 
+            "default": "input tap 157 547\nsleep 1"
+        }
+    }
+
+    def execute(self):
+        # 此时 Base 类已经完成了 Reset 和 area_adb (进场)
+        
+        # --- 步骤 1: 截图识别 ---
+        self.log(">>> 开始识别库存数字...")
+        
+        # 解析坐标
+        crop_list = self.parse_list("digit_crop_box")
+        crop_box = tuple(crop_list) if len(crop_list) == 4 else None
+        
+        if not crop_box:
+            self.log("错误：未配置识别框坐标")
+            return
+
+        # 截图
+        img_path = "sell_check.png"
+        adb_screenshot(img_path, crop_box=crop_box)
+        
+        # AI 识别
+        prompt = (
+            "请识别图中的纯数字整数。"
+            "如果包含斜杠(如 80/100)，只返回斜杠前面的数字。"
+            "如果看起来像 'o' 或 'O'，请识别为 '0'。"
+            "不要输出任何标点或文字，只返回数字。"
+        )
+        ai_res = query_vlm(img_path, prompt)
+        
+        # --- 步骤 2: 数据解析 ---
+        try:
+            # 简单清洗
+            clean_res = ai_res.replace('o', '0').replace('O', '0')
+            import re
+            nums = re.findall(r'\d+', clean_res)
+            
+            # 没识别到给 -1，防止误卖
+            current_count = int(nums[0]) if nums else -1
+            self.log(f"AI返回: {ai_res} -> 识别库存: {current_count}")
+            
+        except Exception as e:
+            self.log(f"解析数字失败: {e}")
+            current_count = -1
+
+        # --- 步骤 3: 逻辑判断 ---
+        threshold = int(self.params.get("sell_threshold", 9999))
+        
+        # 逻辑：超过多少就卖 ( > )
+        if current_count > threshold:
+            self.log(f"条件满足: 库存 {current_count} > 阈值 {threshold}，执行售卖！")
+            
+            sell_cmd = self.params.get("sell_action_adb")
+            execute_multiline_adb(sell_cmd)
+            
+            self.log("售卖动作执行完毕")
+        else:
+            self.log(f"条件不满足: 库存 {current_count} 未超过 {threshold}，跳过。")
+            
+        # 函数结束后，Base 类会自动执行 quit_adb
         
 
 # === 注册表 ===
@@ -1036,7 +1136,8 @@ SCRIPT_REGISTRY = {
         ProcessingTask, 
         CookingTask, 
         OrderTask, 
-        DandelionTask
+        DandelionTask,
+        WarehouseSaleTask
     ]
 }
 
