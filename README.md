@@ -176,7 +176,7 @@ v2.1 增加识别能力：优化Prompt与裁剪参数
 ```text
 TAOYUAN/
 ├── main.py              # 启动入口
-├── build.spec           # PyInstaller 打包配置脚本 (关键源码)
+├── build.spec           # PyInstaller 打包配置脚本 (关键源码)。开发者用pyinstaller build.spec打包exe
 ├── requirements.txt     # 依赖包列表 (安装环境用)
 ├── README.md            # 项目说明文档
 ├── app.ico              # 程序图标 (.exe使用)
