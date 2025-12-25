@@ -167,6 +167,18 @@ class FarmingTask(GameScriptBase):
             # 这里填你希望告诉 AI 的顺序
             "default": "小麦，大豆，甘蔗，水稻，白菜，辣椒，土豆，苎麻, 棉花, 南瓜, 红薯" 
         },
+        # === 在合适的地方添加以下这段配置 ===
+        "state_crop_box": {
+            "label": "状态检测截图裁剪区域 [x1, y1, x2, y2] (留空则全屏)",
+            "type": "string",
+            "default": "[]" 
+        },
+        # === [新增] 这里添加 prompt 参数 ===
+        "check_prompt": {
+            "label": "状态检测AI提示词 (需与截图区域配合)",
+            "type": "text",
+            "default": """请分析这张游戏截图，判断当前处于什么状态。只返回一个关键词：- "harvest" : 画面底部米黄色背景上有镰刀图标。- "plant" : 画面底部米黄色背景上有作物栏有甘蔗水稻白菜等，而不是镰刀。 - "wait" :  画面底部没有米黄色背景，有一些作坊，画面中可能有带加速按钮的时间条。"""
+        },
         # === 动作轨迹配置 ===
         "sickle_pos": {
             "label": "镰刀位置 (x y)",
@@ -212,22 +224,24 @@ class FarmingTask(GameScriptBase):
     }
 
     def execute(self):
-        # 1. 点击田地
-        
+        # === [新增/修改] 解析裁剪参数 ===
+        crop_list = self.parse_list("state_crop_box")
+        # 如果填了4个数字就转成元组，否则为None(全屏)
+        my_crop_box = tuple(crop_list) if len(crop_list) == 4 else None
+
         # 2. 状态判断 
         screenshot_path = "farm_state.png"
-        adb_screenshot(screenshot_path)
         
-        check_prompt = """
-        请分析这张游戏截图，判断当前处于什么状态。
-        只返回一个关键词：
-        - "harvest" : 画面底部有镰刀图标。
-        - "plant" : 画面底部有作物种子选择栏。
-        - "wait" : 其他情况。
-        """
+        # === [修改] 传入 crop_box 参数 ===
+        adb_screenshot(screenshot_path, crop_box=my_crop_box)
+        
+        # === [修改] 从参数获取提示词 ===
+        # 获取用户配置的 prompt，如果没有则使用默认值
+        default_prompt = """请分析这张游戏截图，判断当前处于什么状态。只返回一个关键词：- "harvest" : 画面底部米黄色背景上有镰刀图标。- "plant" : 画面底部米黄色背景上有作物栏有甘蔗水稻白菜等，而不是镰刀。 - "wait" :  画面底部没有米黄色背景，有一些作坊，画面中可能有带加速按钮的时间条。"""
+        # 优先读取 self.params 中的配置
+        check_prompt = self.params.get("check_prompt", default_prompt)
         state = query_vlm(screenshot_path, check_prompt)
         self.log(f"AI判断状态: {state}")
-
         if "harvest" in state:
             self.do_harvest()
             time.sleep(self.s_delay)

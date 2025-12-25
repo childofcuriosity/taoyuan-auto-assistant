@@ -107,6 +107,17 @@ class AppLogic:
                             t_type = t.get("type", self.get_available_types()[0])
                             t["type"] = t_type
                             t["params"] = self.get_default_params(t_type)
+                        # === [新增逻辑] 自动合并缺失的新参数 ===
+                        # 获取该任务类型在当前代码中定义的最新默认值
+                        t_type = t.get("type")
+                        latest_defaults = self.get_default_params(t_type)
+                        
+                        # 遍历最新默认值，如果存档里没有这个key，就补进去
+                        for key, default_val in latest_defaults.items():
+                            if key not in t["params"]:
+                                print(f"自动修补参数: 任务[{t['id']}] 缺少 '{key}'，已自动补充默认值。")
+                                t["params"][key] = default_val
+                        # ==========================================
                         cleaned.append(t)
                     self.tasks = cleaned
             except Exception as e:
