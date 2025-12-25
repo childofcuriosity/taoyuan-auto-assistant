@@ -1128,6 +1128,51 @@ class WarehouseSaleTask(GameScriptBase):
         # 函数结束后，Base 类会自动执行 quit_adb
         
 
+class CustomAdbTask(GameScriptBase):
+    LABEL = "99. 自定义ADB脚本 (宏)"
+    
+    PARAM_CONFIG = {
+        "adb_commands": {
+            "label": "自定义指令 (支持 input tap/swipe, sleep, drag_path)",
+            "type": "text", # 这会在UI显示为大文本框
+            "default": (
+                "# 示例：\n"
+                "input tap 500 500\n"
+                "sleep 1\n"
+                "input swipe 800 500 200 500 1000\n"
+                "# 拖拽动作 (仅限本项目特有指令)\n"
+                "drag_path 100 100 200 200 300 300"
+            )
+        },
+        "skip_reset": {
+            "label": "是否跳过复位 (填 1 跳过，填 0 不跳过)",
+            "type": "string", # 在UI里填 1 或 0
+            "default": "0"
+        },
+        
+    }
+    # 重写复位逻辑：检测参数决定是否跳过
+    def reset_state(self):
+        is_skip = self.params.get("skip_reset", "0").strip()
+        if is_skip == "1":
+            self.log(">>> [设置] 已配置跳过复位步骤")
+            return
+        # 如果不是1，则调用父类的标准复位
+        super().reset_state()
+    def execute(self):
+        commands = self.params.get("adb_commands", "")
+        
+        if not commands.strip():
+            self.log("指令为空，跳过")
+            return
+
+        self.log(f"开始执行自定义ADB指令 ({len(commands.splitlines())} 行)...")
+        
+        # 直接调用你项目中已经写好的解析器
+        # 它会自动处理 sleep, drag_path 和普通的 adb shell 指令
+        execute_multiline_adb(commands)
+        
+        self.log("自定义指令执行完毕")
 # === 注册表 ===
 SCRIPT_REGISTRY = {
     t.LABEL: t for t in [
@@ -1137,7 +1182,8 @@ SCRIPT_REGISTRY = {
         CookingTask, 
         OrderTask, 
         DandelionTask,
-        WarehouseSaleTask
+        WarehouseSaleTask,
+        CustomAdbTask 
     ]
 }
 
