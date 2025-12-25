@@ -1,5 +1,7 @@
 # 文件: MyProject/src/adb_utils.py
 import subprocess
+from time import sleep
+
 from PIL import Image
 from io import BytesIO
 import os
@@ -191,10 +193,13 @@ def execute_multiline_adb(text_block):
 # ================= 辅助工具 =================
 
 def adb_click(x, y):
-    run_adb_cmd(["shell", "input", "tap", str(x), str(y)])
+    from src.touchlink import TouchLink
+    TouchLink().touch(x, y)
 
 def adb_swipe(x1, y1, x2, y2, duration=300):
-    run_adb_cmd(["shell", "input", "swipe", str(x1), str(y1), str(x2), str(y2), str(duration)])
+    from src.touchlink import TouchLink
+    TouchLink().swipe(x1, y1, x2, y2)
+    sleep(duration / 1000)
 
 # 简单的图像处理 (复制粘贴自你之前的代码)
 def create_white_image_like(input_path: str, output_path: str):
@@ -236,37 +241,14 @@ def parse_coordinate(coord_str):
 # ... (保持前面的 imports 和 auto_select_device 等函数不变) ...
 
 def adb_zoom_out(duration=1000):
-    """
-    [核心技巧] 模拟双指捏合 (缩小/Zoom Out)
-    原理：在一条 adb shell 命令中同时执行两个 swipe，利用 & 后台运行
-    """
-    adb_path = get_adb_path()
-    device_id = auto_select_device()
-    
-    # 假设屏幕分辨率大概是 1600x900 (你可以根据实际情况调整坐标)
-    # 手指1: 左上 -> 往中心划
-    # 手指2: 右下 -> 往中心划
-    
-    # 坐标逻辑：(x1, y1) -> (x2, y2)
-    finger1 = "input swipe 200 200 700 400 1000"
-    finger2 = "input swipe 1400 700 900 500 1000"
-    
-    # 拼接命令： "input ... & input ..."
-    # 注意：必须在一个 adb shell 会话中执行，否则会有延迟，变成分步滑动
-    cmd_str = f"{finger1} & {finger2}"
-    
-    base_cmd = [adb_path]
-    if device_id:
-        base_cmd.extend(["-s", device_id])
-    
-    base_cmd.extend(["shell", cmd_str])
-    
-    print(f"【ADB】执行双指缩放: {cmd_str}")
-    try:
-        subprocess.run(base_cmd, timeout=5)
-    except Exception as e:
-        print(f"【缩放失败】{e}")
+    from src.touchlink import TouchLink
 
+    TouchLink().custom([
+        {"action": "swipe", "args": [200, 200, 700, 400], "duration": 1000},
+        {"action": "swipe", "args": [1400, 700, 900, 500], "duration": 1000},
+    ])
+
+    sleep(duration / 1000)
 
 
 def stitch_images(img_path_left, img_path_right, output_path, split_x_left=None, split_x_right=None):
@@ -387,9 +369,29 @@ def run_continuous_drag(point_list, hold_time=1200):
     try: os.remove(local_path)
     except: pass
 
+
+def run_touchlink(local_path, remote_path):
+    adb_path = get_adb_path()
+    device_id = auto_select_device()
+
+    # Push
+    cmd_push = [adb_path]
+    if device_id: cmd_push.extend(["-s", device_id])
+    cmd_push.extend(["push", local_path, remote_path])
+    subprocess.run(cmd_push)
+
+    cmd_touchlink = [adb_path]
+    if device_id: cmd_touchlink.extend(["-s", device_id])
+    cmd_touchlink.extend(["shell", "app_process", f"-Djava.class.path={remote_path}", '/', "xyz.mufanc.taa.Main"])
+
+    return subprocess.Popen(cmd_touchlink, stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+
 # ================= 更新：解析器支持 drag_path =================
 
 def execute_multiline_adb(text_block):
+    from src.touchlink import TouchLink
+
     """
     解析器更新：支持 'drag_path' 指令
     语法: drag_path x1 y1 x2 y2 x3 y3 ...
@@ -413,11 +415,18 @@ def execute_multiline_adb(text_block):
             try:
                 raw_nums = [int(x) for x in parts[1:]]
                 # 两个一组转成 [(x,y), (x,y)]
-                coords = list(zip(raw_nums[::2], raw_nums[1::2]))
+                coords = [raw_nums[::2], raw_nums[1::2]]
                 if coords:
-                    run_continuous_drag(coords)
+                    TouchLink().swipe_path(coords)
             except Exception as e:
                 print(f"指令解析错误: {e}")
+            continue
+        elif cmd == "input":
+            if parts[1] == "tap":
+                TouchLink().touch(int(parts[2]), int(parts[3]))
+            elif parts[1] == "swipe":
+                TouchLink().swipe(int(parts[2]), int(parts[3]), int(parts[4]), int(parts[5]))
+
             continue
         
         # ... (下面是之前的 sleep 和 adb shell 逻辑，保持不变) ...
