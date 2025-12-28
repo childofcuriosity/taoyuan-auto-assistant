@@ -16,8 +16,16 @@ class TouchLink(object):
         self._proc = run_touchlink('touchlink.apk', '/data/local/tmp/touchlink.apk')
 
     def _emit(self, data):
+        data = {
+            'action': 'input',
+            'params': {
+                'inputs': data
+            }
+        }
+
         self._proc.stdin.write(json.dumps(data).encode() + b'\n')
         self._proc.stdin.flush()
+        self._proc.stdout.readline()
 
     def touch(self, x, y):
         self._emit([{'action': 'touch', 'args': [x, y]}])

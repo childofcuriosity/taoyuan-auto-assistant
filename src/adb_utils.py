@@ -248,9 +248,6 @@ def adb_zoom_out(duration=1000):
         {"action": "swipe", "args": [1400, 700, 900, 500], "duration": 1000},
     ])
 
-    sleep(duration / 1000)
-
-
 def stitch_images(img_path_left, img_path_right, output_path, split_x_left=None, split_x_right=None):
     """
     [更新] 拼接两张图片 (支持自定义裁剪 X 轴)
@@ -378,13 +375,13 @@ def run_touchlink(local_path, remote_path):
     cmd_push = [adb_path]
     if device_id: cmd_push.extend(["-s", device_id])
     cmd_push.extend(["push", local_path, remote_path])
-    subprocess.run(cmd_push)
+    subprocess.run(cmd_push, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     cmd_touchlink = [adb_path]
     if device_id: cmd_touchlink.extend(["-s", device_id])
     cmd_touchlink.extend(["shell", "app_process", f"-Djava.class.path={remote_path}", '/', "xyz.mufanc.taa.Main"])
 
-    return subprocess.Popen(cmd_touchlink, stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    return subprocess.Popen(cmd_touchlink, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
 
 
 # ================= 更新：解析器支持 drag_path =================
@@ -411,13 +408,9 @@ def execute_multiline_adb(text_block):
         if cmd == "drag_path":
             # 解析后面的坐标点
             # 格式: drag_path 100 100 200 200 300 300
-            coords = []
             try:
                 raw_nums = [int(x) for x in parts[1:]]
-                # 两个一组转成 [(x,y), (x,y)]
-                coords = [raw_nums[::2], raw_nums[1::2]]
-                if coords:
-                    TouchLink().swipe_path(coords)
+                TouchLink().swipe_path(raw_nums)
             except Exception as e:
                 print(f"指令解析错误: {e}")
             continue
