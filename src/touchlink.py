@@ -31,7 +31,7 @@ class TouchLink(object):
         self._emit([{'action': 'touch', 'args': [x, y]}])
 
     def swipe(self, x1, y1, x2, y2):
-        self._emit([{'action': 'swipe', 'args': [x1, y1, x2, y2]}])
+        self._emit([{'action': 'swipe', 'args': [x1, y1, x2, y2], 'extras': {'stabilize': 100}}])
 
     def swipe_path(self, points):
         self._emit([{'action': 'swipe', 'args': points}])
