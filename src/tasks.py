@@ -371,8 +371,9 @@ class FarmingTask(GameScriptBase):
                 plant_cmd = f"drag_path {clean_pos} {path}\nsleep 1"
                 
                 self.log(f"生成播种指令: {plant_cmd}...")
+                # import pdb;pdb.set_trace()
                 execute_multiline_adb(plant_cmd)
-                
+                print('pdb')
             else:
                 self.log("库存充足")
                 # === 关键修改：执行关闭动作 ===
