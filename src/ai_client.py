@@ -94,7 +94,7 @@ def query_vlm(image_path: str, prompt: str, model: str = 'glm-4v-flash'):
         )
         
         result = response.choices[0].message.content
-        # print(f"【AI回复】{result}") # 调试时可以打开，平时太吵可以注释
+        print(f"【AI回复】{result}") # 调试时可以打开，平时太吵可以注释
         return result
 
     except Exception as e:

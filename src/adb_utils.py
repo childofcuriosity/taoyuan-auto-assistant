@@ -12,7 +12,7 @@ CURRENT_DEVICE_ID = None
 
 def get_adb_path():
     """获取 ADB 路径，带默认值防止报错"""
-    return os.environ.get('adb_path', 'adb')
+    return os.environ.get('adb_path', "C:/Program Files/Netease/MuMu/nx_main/adb.exe")
 def auto_select_device():
     """
     [核心逻辑] 自动寻找并锁定第一个可用的设备
