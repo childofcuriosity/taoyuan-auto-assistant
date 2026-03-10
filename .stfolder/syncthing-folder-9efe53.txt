@@ -1,0 +1,5 @@
+# This directory is a Syncthing folder marker.
+# Do not delete.
+
+folderID: wyem3-wpejf
+created: 2025-12-28T13:42:13+08:00

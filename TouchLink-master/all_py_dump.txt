@@ -1,0 +1,1193 @@
+
+===== .\.gitignore =====
+
+*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+
+===== .\all_py_dump.txt =====
+
+
+
+===== .\build.gradle.kts =====
+
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+plugins {
+    alias(libs.plugins.agp.app) apply false
+    alias(libs.plugins.agp.lib) apply false
+    alias(libs.plugins.kotlin.android) apply false
+}
+
+val cfgMinSdkVersion by extra(30)
+val cfgTargetSdkVersion by extra(36)
+val cfgCompileSdkVersion by extra(36)
+val cfgSourceCompatibility by extra(JavaVersion.VERSION_17)
+val cfgTargetCompatibility by extra(JavaVersion.VERSION_17)
+val cfgKotlinJvmTarget by extra(JvmTarget.JVM_17)
+
+
+===== .\gradle.properties =====
+
+# Project-wide Gradle settings.
+# IDE (e.g. Android Studio) users:
+# Gradle settings configured through the IDE *will override*
+# any settings specified in this file.
+# For more details on how to configure your build environment visit
+# http://www.gradle.org/docs/current/userguide/build_environment.html
+# Specifies the JVM arguments used for the daemon process.
+# The setting is particularly useful for tweaking memory settings.
+org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
+# When configured, Gradle will run in incubating parallel mode.
+# This option should only be used with decoupled projects. For more details, visit
+# https://developer.android.com/r/tools/gradle-multi-project-decoupled-projects
+# org.gradle.parallel=true
+# AndroidX package structure to make it clearer which packages are bundled with the
+# Android operating system, and which are packaged with your app's APK
+# https://developer.android.com/topic/libraries/support-library/androidx-rn
+android.useAndroidX=true
+# Kotlin code style for this project: "official" or "obsolete":
+kotlin.code.style=official
+# Enables namespacing of each library's R class so that its R class includes only the
+# resources declared in the library itself and none from the library's dependencies,
+# thereby reducing the size of the R class for that library
+android.nonTransitiveRClass=true
+
+===== .\gradlew =====
+
+#!/usr/bin/env sh
+
+#
+# Copyright 2015 the original author or authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+##############################################################################
+##
+##  Gradle start up script for UN*X
+##
+##############################################################################
+
+# Attempt to set APP_HOME
+# Resolve links: $0 may be a link
+PRG="$0"
+# Need this for relative symlinks.
+while [ -h "$PRG" ] ; do
+    ls=`ls -ld "$PRG"`
+    link=`expr "$ls" : '.*-> \(.*\)$'`
+    if expr "$link" : '/.*' > /dev/null; then
+        PRG="$link"
+    else
+        PRG=`dirname "$PRG"`"/$link"
+    fi
+done
+SAVED="`pwd`"
+cd "`dirname \"$PRG\"`/" >/dev/null
+APP_HOME="`pwd -P`"
+cd "$SAVED" >/dev/null
+
+APP_NAME="Gradle"
+APP_BASE_NAME=`basename "$0"`
+
+# Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
+DEFAULT_JVM_OPTS='"-Xmx64m" "-Xms64m"'
+
+# Use the maximum available, or set MAX_FD != -1 to use that value.
+MAX_FD="maximum"
+
+warn () {
+    echo "$*"
+}
+
+die () {
+    echo
+    echo "$*"
+    echo
+    exit 1
+}
+
+# OS specific support (must be 'true' or 'false').
+cygwin=false
+msys=false
+darwin=false
+nonstop=false
+case "`uname`" in
+  CYGWIN* )
+    cygwin=true
+    ;;
+  Darwin* )
+    darwin=true
+    ;;
+  MINGW* )
+    msys=true
+    ;;
+  NONSTOP* )
+    nonstop=true
+    ;;
+esac
+
+CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
+
+
+# Determine the Java command to use to start the JVM.
+if [ -n "$JAVA_HOME" ] ; then
+    if [ -x "$JAVA_HOME/jre/sh/java" ] ; then
+        # IBM's JDK on AIX uses strange locations for the executables
+        JAVACMD="$JAVA_HOME/jre/sh/java"
+    else
+        JAVACMD="$JAVA_HOME/bin/java"
+    fi
+    if [ ! -x "$JAVACMD" ] ; then
+        die "ERROR: JAVA_HOME is set to an invalid directory: $JAVA_HOME
+
+Please set the JAVA_HOME variable in your environment to match the
+location of your Java installation."
+    fi
+else
+    JAVACMD="java"
+    which java >/dev/null 2>&1 || die "ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.
+
+Please set the JAVA_HOME variable in your environment to match the
+location of your Java installation."
+fi
+
+# Increase the maximum file descriptors if we can.
+if [ "$cygwin" = "false" -a "$darwin" = "false" -a "$nonstop" = "false" ] ; then
+    MAX_FD_LIMIT=`ulimit -H -n`
+    if [ $? -eq 0 ] ; then
+        if [ "$MAX_FD" = "maximum" -o "$MAX_FD" = "max" ] ; then
+            MAX_FD="$MAX_FD_LIMIT"
+        fi
+        ulimit -n $MAX_FD
+        if [ $? -ne 0 ] ; then
+            warn "Could not set maximum file descriptor limit: $MAX_FD"
+        fi
+    else
+        warn "Could not query maximum file descriptor limit: $MAX_FD_LIMIT"
+    fi
+fi
+
+# For Darwin, add options to specify how the application appears in the dock
+if $darwin; then
+    GRADLE_OPTS="$GRADLE_OPTS \"-Xdock:name=$APP_NAME\" \"-Xdock:icon=$APP_HOME/media/gradle.icns\""
+fi
+
+# For Cygwin or MSYS, switch paths to Windows format before running java
+if [ "$cygwin" = "true" -o "$msys" = "true" ] ; then
+    APP_HOME=`cygpath --path --mixed "$APP_HOME"`
+    CLASSPATH=`cygpath --path --mixed "$CLASSPATH"`
+
+    JAVACMD=`cygpath --unix "$JAVACMD"`
+
+    # We build the pattern for arguments to be converted via cygpath
+    ROOTDIRSRAW=`find -L / -maxdepth 1 -mindepth 1 -type d 2>/dev/null`
+    SEP=""
+    for dir in $ROOTDIRSRAW ; do
+        ROOTDIRS="$ROOTDIRS$SEP$dir"
+        SEP="|"
+    done
+    OURCYGPATTERN="(^($ROOTDIRS))"
+    # Add a user-defined pattern to the cygpath arguments
+    if [ "$GRADLE_CYGPATTERN" != "" ] ; then
+        OURCYGPATTERN="$OURCYGPATTERN|($GRADLE_CYGPATTERN)"
+    fi
+    # Now convert the arguments - kludge to limit ourselves to /bin/sh
+    i=0
+    for arg in "$@" ; do
+        CHECK=`echo "$arg"|egrep -c "$OURCYGPATTERN" -`
+        CHECK2=`echo "$arg"|egrep -c "^-"`                                 ### Determine if an option
+
+        if [ $CHECK -ne 0 ] && [ $CHECK2 -eq 0 ] ; then                    ### Added a condition
+            eval `echo args$i`=`cygpath --path --ignore --mixed "$arg"`
+        else
+            eval `echo args$i`="\"$arg\""
+        fi
+        i=`expr $i + 1`
+    done
+    case $i in
+        0) set -- ;;
+        1) set -- "$args0" ;;
+        2) set -- "$args0" "$args1" ;;
+        3) set -- "$args0" "$args1" "$args2" ;;
+        4) set -- "$args0" "$args1" "$args2" "$args3" ;;
+        5) set -- "$args0" "$args1" "$args2" "$args3" "$args4" ;;
+        6) set -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" ;;
+        7) set -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" "$args6" ;;
+        8) set -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" "$args6" "$args7" ;;
+        9) set -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" "$args6" "$args7" "$args8" ;;
+    esac
+fi
+
+# Escape application args
+save () {
+    for i do printf %s\\n "$i" | sed "s/'/'\\\\''/g;1s/^/'/;\$s/\$/' \\\\/" ; done
+    echo " "
+}
+APP_ARGS=`save "$@"`
+
+# Collect all arguments for the java command, following the shell quoting and substitution rules
+eval set -- $DEFAULT_JVM_OPTS $JAVA_OPTS $GRADLE_OPTS "\"-Dorg.gradle.appname=$APP_BASE_NAME\"" -classpath "\"$CLASSPATH\"" org.gradle.wrapper.GradleWrapperMain "$APP_ARGS"
+
+exec "$JAVACMD" "$@"
+
+
+===== .\gradlew.bat =====
+
+@rem
+@rem Copyright 2015 the original author or authors.
+@rem
+@rem Licensed under the Apache License, Version 2.0 (the "License");
+@rem you may not use this file except in compliance with the License.
+@rem You may obtain a copy of the License at
+@rem
+@rem      https://www.apache.org/licenses/LICENSE-2.0
+@rem
+@rem Unless required by applicable law or agreed to in writing, software
+@rem distributed under the License is distributed on an "AS IS" BASIS,
+@rem WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+@rem See the License for the specific language governing permissions and
+@rem limitations under the License.
+@rem
+
+@if "%DEBUG%" == "" @echo off
+@rem ##########################################################################
+@rem
+@rem  Gradle startup script for Windows
+@rem
+@rem ##########################################################################
+
+@rem Set local scope for the variables with windows NT shell
+if "%OS%"=="Windows_NT" setlocal
+
+set DIRNAME=%~dp0
+if "%DIRNAME%" == "" set DIRNAME=.
+set APP_BASE_NAME=%~n0
+set APP_HOME=%DIRNAME%
+
+@rem Resolve any "." and ".." in APP_HOME to make it shorter.
+for %%i in ("%APP_HOME%") do set APP_HOME=%%~fi
+
+@rem Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
+set DEFAULT_JVM_OPTS="-Xmx64m" "-Xms64m"
+
+@rem Find java.exe
+if defined JAVA_HOME goto findJavaFromJavaHome
+
+set JAVA_EXE=java.exe
+%JAVA_EXE% -version >NUL 2>&1
+if "%ERRORLEVEL%" == "0" goto execute
+
+echo.
+echo ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.
+echo.
+echo Please set the JAVA_HOME variable in your environment to match the
+echo location of your Java installation.
+
+goto fail
+
+:findJavaFromJavaHome
+set JAVA_HOME=%JAVA_HOME:"=%
+set JAVA_EXE=%JAVA_HOME%/bin/java.exe
+
+if exist "%JAVA_EXE%" goto execute
+
+echo.
+echo ERROR: JAVA_HOME is set to an invalid directory: %JAVA_HOME%
+echo.
+echo Please set the JAVA_HOME variable in your environment to match the
+echo location of your Java installation.
+
+goto fail
+
+:execute
+@rem Setup the command line
+
+set CLASSPATH=%APP_HOME%\gradle\wrapper\gradle-wrapper.jar
+
+
+@rem Execute Gradle
+"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %GRADLE_OPTS% "-Dorg.gradle.appname=%APP_BASE_NAME%" -classpath "%CLASSPATH%" org.gradle.wrapper.GradleWrapperMain %*
+
+:end
+@rem End local scope for the variables with windows NT shell
+if "%ERRORLEVEL%"=="0" goto mainEnd
+
+:fail
+rem Set variable GRADLE_EXIT_CONSOLE if you need the _script_ return code instead of
+rem the _cmd.exe /c_ return code!
+if  not "" == "%GRADLE_EXIT_CONSOLE%" exit 1
+exit /b 1
+
+:mainEnd
+if "%OS%"=="Windows_NT" endlocal
+
+:omega
+
+
+===== .\settings.gradle.kts =====
+
+pluginManagement {
+    repositories {
+        google {
+            content {
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.google.*")
+                includeGroupByRegex("androidx.*")
+            }
+        }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "TouchLink"
+
+include(":app")
+include(":hiddenapi")
+
+
+===== .\app\.gitignore =====
+
+/build
+
+===== .\app\build.gradle.kts =====
+
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+plugins {
+    alias(libs.plugins.agp.app)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.hiddenapi.refine)
+}
+
+val cfgMinSdkVersion: Int by rootProject.extra
+val cfgTargetSdkVersion: Int by rootProject.extra
+val cfgCompileSdkVersion: Int by rootProject.extra
+val cfgSourceCompatibility: JavaVersion by rootProject.extra
+val cfgTargetCompatibility: JavaVersion by rootProject.extra
+val cfgKotlinJvmTarget: JvmTarget by rootProject.extra
+
+android {
+    namespace = "xyz.mufanc.taa"
+    compileSdk = cfgCompileSdkVersion
+
+    defaultConfig {
+        applicationId = "xyz.mufanc.taa"
+        minSdk = cfgMinSdkVersion
+        targetSdk = cfgTargetSdkVersion
+        versionCode = 1
+        versionName = "1.0"
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles("proguard-rules.pro")
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = cfgSourceCompatibility
+        targetCompatibility = cfgTargetCompatibility
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(cfgKotlinJvmTarget)
+    }
+}
+
+dependencies {
+    compileOnly(project(":hiddenapi"))
+    implementation(libs.core.ktx)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.hiddenapi.runtime)
+    implementation(libs.moshi.kotlin)
+}
+
+tasks.register("deployRelease") {
+    group = "deployment"
+    description = "Build and push release APK to device"
+
+    dependsOn("assembleRelease")
+
+    doLast {
+        val outputApk = File(
+            layout.buildDirectory.dir("outputs/apk/release").get().asFile,
+            "app-release-unsigned.apk"
+        )
+
+        println("Found APK: ${outputApk.absolutePath}")
+        println("Pushing to device...")
+
+        val adb = android.adbExecutable.absolutePath
+
+        val args = listOf(adb, "push", outputApk.absolutePath, "/data/local/tmp/touchlink.apk")
+        val process = ProcessBuilder(args)
+            .redirectOutput(ProcessBuilder.Redirect.INHERIT)
+            .redirectError(ProcessBuilder.Redirect.INHERIT)
+            .start()
+
+        val code = process.waitFor()
+        if (code != 0) {
+            throw GradleException("Failed to push APK to device (exit code: $code)")
+        }
+
+        println("Successfully pushed APK to device")
+    }
+}
+
+
+===== .\app\proguard-rules.pro =====
+
+# Add project specific ProGuard rules here.
+# You can control the set of applied configuration files using the
+# proguardFiles setting in build.gradle.
+#
+# For more details, see
+#   http://developer.android.com/guide/developing/tools/proguard.html
+
+# If your project uses WebView with JS, uncomment the following
+# and specify the fully qualified class name to the JavaScript interface
+# class:
+#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
+#   public *;
+#}
+
+# Uncomment this to preserve the line number information for
+# debugging stack traces.
+#-keepattributes SourceFile,LineNumberTable
+
+# If you keep the line number information, uncomment this to
+# hide the original source file name.
+#-renamesourcefileattribute SourceFile
+
+===== .\app\src\main\AndroidManifest.xml =====
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:tools="http://schemas.android.com/tools">
+    <application tools:targetApi="31" tools:ignore="MissingApplicationIcon" />
+</manifest>
+
+
+===== .\app\src\main\java\xyz\mufanc\taa\Main.kt =====
+
+package xyz.mufanc.taa
+
+import xyz.mufanc.taa.actions.ActionResult
+import xyz.mufanc.taa.actions.impl.TouchLinkAction
+import xyz.mufanc.taa.misc.JsonCompat
+import xyz.mufanc.taa.misc.Log
+import java.io.BufferedReader
+import java.io.InputStreamReader
+
+object Main {
+
+    private const val TAG = "Main"
+
+    @JvmStatic
+    fun main(args: Array<String>) {
+        Thread.setDefaultUncaughtExceptionHandler { th, err ->
+            Log.e(TAG, "Uncaught exception on thread: $th", err)
+        }
+
+        val reader = BufferedReader(InputStreamReader(System.`in`))
+
+        while (true) {
+            val line = reader.readLine() ?: break
+
+            if (line.isBlank()) {
+                continue
+            }
+
+            try {
+                val action: TouchLinkAction? = JsonCompat.fromJson(line.trim())
+
+                if (action == null) {
+                    println(ActionResult.failed("failed to parse command"))
+                    continue
+                }
+
+                println(action.run())
+            } catch (err: Throwable) {
+                Log.e(TAG, "unknown error", err)
+                println(ActionResult.failed(err.message))
+            }
+        }
+    }
+}
+
+
+===== .\app\src\main\java\xyz\mufanc\taa\actions\ActionResult.kt =====
+
+package xyz.mufanc.taa.actions
+
+import xyz.mufanc.taa.misc.JsonCompat
+import java.io.Serializable
+
+data class ActionResult(
+    val success: Boolean = false,
+    val message: String? = null
+) : Serializable {
+
+    companion object {
+        fun success(msg: String? = null): String {
+            return JsonCompat.toJson(ActionResult(true, msg))!!
+        }
+
+        fun failed(msg: String? = null): String {
+            return JsonCompat.toJson(ActionResult(false, msg))!!
+        }
+    }
+}
+
+
+===== .\app\src\main\java\xyz\mufanc\taa\actions\IAction.kt =====
+
+package xyz.mufanc.taa.actions
+
+import java.io.Serializable
+
+interface IAction : Serializable {
+    fun run(): String
+}
+
+
+===== .\app\src\main\java\xyz\mufanc\taa\actions\ISuperAction.kt =====
+
+package xyz.mufanc.taa.actions
+
+interface ISuperAction : IAction {
+    fun downcast(): IAction?
+}
+
+
+===== .\app\src\main\java\xyz\mufanc\taa\actions\impl\InputAction.kt =====
+
+package xyz.mufanc.taa.actions.impl
+
+import xyz.mufanc.taa.actions.IAction
+import xyz.mufanc.taa.input.InputDispatcher
+import xyz.mufanc.taa.input.InputEvent
+
+class InputAction : IAction {
+
+    var inputs: List<InputEvent> = emptyList()
+
+    override fun run(): String {
+        return InputDispatcher.dispatchInputs(inputs)
+    }
+}
+
+
+===== .\app\src\main\java\xyz\mufanc\taa\actions\impl\TouchLinkAction.kt =====
+
+package xyz.mufanc.taa.actions.impl
+
+import xyz.mufanc.taa.actions.ActionResult
+import xyz.mufanc.taa.actions.IAction
+import xyz.mufanc.taa.actions.ISuperAction
+import xyz.mufanc.taa.misc.JsonCompat
+
+class TouchLinkAction(
+    val action: String,
+    val params: Map<String, Any>
+) : ISuperAction {
+
+    override fun run(): String {
+        val action = downcast() ?: return ActionResult.failed("unknown action")
+        return action.run()
+    }
+
+    override fun downcast(): IAction? {
+        return when (action) {
+            "input" -> JsonCompat.fromJsonValue<InputAction>(params)
+            else -> null
+        }
+    }
+}
+
+
+===== .\app\src\main\java\xyz\mufanc\taa\input\InputDispatcher.kt =====
+
+package xyz.mufanc.taa.input
+
+import android.annotation.SuppressLint
+import android.os.Handler
+import android.os.HandlerThread
+import android.os.MessageQueue
+import android.os.SystemClock
+import androidx.core.os.postAtTime
+import androidx.core.os.postDelayed
+import xyz.mufanc.taa.actions.ActionResult
+import xyz.mufanc.taa.input.InputEvent.Action
+import xyz.mufanc.taa.misc.Log
+import kotlin.math.sqrt
+
+object InputDispatcher {
+
+    private const val TAG = "InputDispatcher"
+
+    fun dispatchInputs(inputs: List<InputEvent>): String {
+        val actions = inputs.map { event ->
+            event.downcast() ?: return ActionResult.failed("invalid input event: $event")
+        }
+
+        Log.d(TAG, "actions = $actions")
+
+        if (actions.isEmpty()) {
+            return ActionResult.failed("no input action")
+        }
+
+        val worker = Worker()
+
+        actions.forEach { action ->
+            when (action) {
+                is Action.Touch -> worker.performTouch(action)
+                is Action.Swipe -> worker.performSwipe(action)
+            }
+        }
+
+        worker.joinQuit()
+
+        return ActionResult.success("OK")
+    }
+
+    private class Worker : HandlerThread("taa-dispatcher") {
+
+        @SuppressLint("DiscouragedPrivateApi")
+        companion object {
+
+            private const val SWIPE_EVENT_PERIOD_MILLIS = 1000f / 60f  // 60Hz
+
+            private val messages by lazy {
+                MessageQueue::class.java.getDeclaredField("mMessages").apply {
+                    isAccessible = true
+                }
+            }
+        }
+
+        private val handler by lazy {
+            start()
+            Handler(looper)
+        }
+
+        fun performTouch(action: Action.Touch) {
+            val id = TouchSimulator.down(action.point.x, action.point.y)
+
+            handler.postDelayed(action.duration) {
+                TouchSimulator.up(id, action.point.x, action.point.y)
+            }
+        }
+
+        fun performSwipe(action: Action.Swipe) {
+            val numSegments = action.points.size - 1
+            val segments = FloatArray(numSegments)
+            var length = 0f
+
+            for (i in 0 ..< numSegments) {
+                val p1 = action.points[i]
+                val p2 = action.points[i + 1]
+
+                val dx = (p2.x - p1.x).toFloat()
+                val dy = (p2.y - p1.y).toFloat()
+
+                val dis = sqrt(dx * dx + dy * dy)
+
+                segments[i] = dis
+                length += dis
+            }
+
+            var duration = action.duration
+
+            if (duration == 0L) {
+                duration = (action.points.size - 1) * 200L
+            }
+
+            val numEvents = (duration / SWIPE_EVENT_PERIOD_MILLIS).toInt()
+            val ts = SystemClock.uptimeMillis()
+
+            val id = TouchSimulator.down(action.points[0].x, action.points[0].y)
+
+            fun lerp(a: Int, b: Int, t: Float): Int {
+                return (a.toFloat() + (b.toFloat() - a) * t).toInt()
+            }
+
+            for (i in 1 .. numEvents) {
+                val target = length * i.toFloat() / numEvents
+
+                var distance = 0f
+                var index = 0
+
+                while (index < numSegments && distance + segments[index] < target) {
+                    distance += segments[index]
+                    index++
+                }
+
+                val progress = if (segments[index] > 0) {
+                    (target - distance) / segments[index]
+                } else {
+                    0f
+                }
+
+                val p1 = action.points[index]
+                val p2 = action.points[index + 1]
+                val x = lerp(p1.x, p2.x, progress)
+                val y = lerp(p1.y, p2.y, progress)
+
+                val time = ts + (i * SWIPE_EVENT_PERIOD_MILLIS).toLong()
+
+                handler.postAtTime(time) {
+                    TouchSimulator.move(id, x, y)
+                }
+            }
+
+            handler.postAtTime(ts + duration) {
+                val point = action.points.last()
+
+                TouchSimulator.move(id, point.x, point.y)
+
+                if (action.stabilize == 0L) {
+                    TouchSimulator.up(id, point.x, point.y)
+                } else {
+                    handler.postDelayed(action.stabilize) {
+                        TouchSimulator.up(id, point.x, point.y)
+                    }
+                }
+            }
+        }
+
+        fun joinQuit() {
+            val queue = looper.queue
+
+            queue.addIdleHandler {
+                synchronized(queue) {
+                    if (messages.get(queue) == null) {
+                        quitSafely()
+                        false
+                    } else {
+                        true
+                    }
+                }
+            }
+
+            join()
+        }
+    }
+}
+
+===== .\app\src\main\java\xyz\mufanc\taa\input\InputEvent.kt =====
+
+package xyz.mufanc.taa.input
+
+import android.graphics.Point
+import java.io.Serializable
+
+class InputEvent : Serializable {
+
+    var action: String? = null
+    var delay: Long = 0
+    var duration: Long = 0
+    var args: List<Int> = emptyList()
+    var extras: Map<String, Int> = emptyMap()
+
+    fun downcast(): Action? {
+        return when (action) {
+            "touch" if args.size == 2 -> {
+                Action.Touch(Point(args[0], args[1]), delay, duration)
+            }
+            "swipe" if args.size >= 2 && args.size % 2 == 0 -> {
+                val points = ArrayList<Point>(args.size / 2)
+
+                for (i in args.indices step 2) {
+                    points.add(Point(args[i], args[i + 1]))
+                }
+
+                Action.Swipe(points, extras["stabilize"]?.toLong() ?: 0)
+            }
+            else -> null
+        }
+    }
+
+    override fun toString(): String {
+        return "InputEvent[action=$action|delay=$delay|duration=$duration|args=$args]"
+    }
+
+    sealed class Action {
+
+        abstract val delay: Long
+        abstract val duration: Long
+
+        data class Touch(
+            val point: Point,
+            override val delay: Long = 0,
+            override val duration: Long = 0
+        ) : Action()
+
+        data class Swipe(
+            val points: List<Point>,
+            val stabilize: Long,
+            override val delay: Long = 0,
+            override val duration: Long = 0
+        ) : Action()
+    }
+}
+
+
+===== .\app\src\main\java\xyz\mufanc\taa\input\TouchSimulator.kt =====
+
+package xyz.mufanc.taa.input
+
+import android.graphics.Point
+import android.hardware.input.InputManagerHidden
+import android.os.SystemClock
+import android.view.InputDevice
+import android.view.InputEvent
+import android.view.MotionEvent
+import dev.rikka.tools.refine.Refine
+
+object TouchSimulator {
+
+    private const val DEFAULT_META_STATE = 0
+    private const val DEFAULT_BUTTON_STATE = 0
+    private const val DEFAULT_PRECISION_X = 1f
+    private const val DEFAULT_PRECISION_Y = 1f
+    private const val DEFAULT_EDGE_FLAGS = 0
+    private const val DEFAULT_INPUT_SOURCE = InputDevice.SOURCE_TOUCHSCREEN
+    private const val DEFAULT_DEVICE_ID = 0
+    private const val DEFAULT_FLAGS = 0
+
+    private val im: InputManagerHidden by lazy {
+        Refine.unsafeCast(InputManagerHidden.getInstance())
+    }
+
+    private var downTime = 0L
+    private val pointers = LinkedHashMap<Int, Point>()
+    private var next = 0
+    private val recycled = mutableSetOf<Int>()
+
+    fun down(x: Int, y: Int): Int {
+        val id = if (recycled.isNotEmpty()) {
+            recycled.first().also { recycled.remove(it) }
+        } else {
+            next++
+        }
+
+        pointers[id] = Point(x, y)
+
+        val ts = SystemClock.uptimeMillis()
+        val action = if (pointers.size == 1) {
+            downTime = ts
+            MotionEvent.ACTION_DOWN
+        } else{
+            val index = pointers.size - 1
+            MotionEvent.ACTION_POINTER_DOWN or (index shl MotionEvent.ACTION_POINTER_INDEX_SHIFT)
+        }
+
+        dispatchEvent(ts, action)
+
+        return id
+    }
+
+    fun move(id: Int, x: Int, y: Int) {
+        require(pointers.containsKey(id))
+        pointers[id] = Point(x, y)
+
+        val ts = SystemClock.uptimeMillis()
+
+        dispatchEvent(ts, MotionEvent.ACTION_MOVE)
+    }
+
+    fun up(id: Int, x: Int, y: Int) {
+        require(pointers.containsKey(id))
+        pointers[id] = Point(x, y)
+
+        val ts = SystemClock.uptimeMillis()
+        val action = when {
+            pointers.size == 1 -> {
+                MotionEvent.ACTION_UP
+            }
+            else -> {
+                val index = pointers.keys.indexOf(id)
+                MotionEvent.ACTION_POINTER_UP or (index shl MotionEvent.ACTION_POINTER_INDEX_SHIFT)
+            }
+        }
+
+        dispatchEvent(ts, action)
+        pointers.remove(id)
+        recycled.add(id)
+    }
+
+    private fun getInputDeviceId(): Int {
+        val ids = InputDevice.getDeviceIds()
+
+        for (id in ids) {
+            val dev = InputDevice.getDevice(id)
+            if (dev?.supportsSource(DEFAULT_INPUT_SOURCE) == true) {
+                return id
+            }
+        }
+
+        return DEFAULT_DEVICE_ID
+    }
+
+    private fun dispatchEvent(ts: Long, action: Int) {
+        val count = pointers.size
+        val props = Array(count) { MotionEvent.PointerProperties() }
+        val coords = Array(count) { MotionEvent.PointerCoords() }
+
+        pointers.entries.forEachIndexed { index, entry ->
+            props[index].apply { id = entry.key }
+            coords[index].apply {
+                x = entry.value.x.toFloat()
+                y = entry.value.y.toFloat()
+            }
+        }
+
+        val event = MotionEvent.obtain(
+            downTime,
+            ts,
+            action,
+            count,
+            props,
+            coords,
+            DEFAULT_META_STATE,
+            DEFAULT_BUTTON_STATE,
+            DEFAULT_PRECISION_X,
+            DEFAULT_PRECISION_Y,
+            getInputDeviceId(),
+            DEFAULT_EDGE_FLAGS,
+            DEFAULT_INPUT_SOURCE,
+            DEFAULT_FLAGS
+        )
+
+        injectInputEvent(event)
+    }
+
+    fun injectInputEvent(event: InputEvent, mode: Mode = Mode.WAIT_FOR_RESULT) {
+        im.injectInputEvent(event, mode.code)
+        (event as? MotionEvent)?.recycle()
+    }
+
+    @Suppress("unused")
+    enum class Mode(val code: Int) {
+        NONE(0),
+        WAIT_FOR_RESULT(1),
+        WAIT_FOR_FINISHED(2)
+    }
+}
+
+
+===== .\app\src\main\java\xyz\mufanc\taa\misc\JsonCompat.kt =====
+
+package xyz.mufanc.taa.misc
+
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+
+object JsonCompat {
+
+    val moshi: Moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+
+    inline fun <reified T> fromJson(json: String): T? {
+        val adapter = moshi.adapter(T::class.java)
+        return adapter.fromJson(json)
+    }
+
+    inline fun <reified T> fromJsonValue(value: Any?): T? {
+        val adapter = moshi.adapter(T::class.java)
+        return adapter.fromJsonValue(value)
+    }
+
+    inline fun <reified T> toJson(value: T): String? {
+        val adapter = moshi.adapter(T::class.java)
+        return adapter.toJson(value)
+    }
+}
+
+
+===== .\app\src\main\java\xyz\mufanc\taa\misc\Log.kt =====
+
+package xyz.mufanc.taa.misc
+
+import android.util.Log
+
+object Log {
+
+    private const val TAG = "TouchLink"
+
+    fun d(tag: String, message: String) {
+        Log.d(TAG, ("[$tag] $message"))
+    }
+
+    fun e(tag: String, message: String, err: Throwable) {
+        Log.e(TAG, "[$tag] $message\n${Log.getStackTraceString(err)}")
+    }
+}
+
+
+===== .\gradle\libs.versions.toml =====
+
+[versions]
+agp = "8.13.2"
+kotlin = "2.3.0"
+core-ktx = "1.17.0"
+hiddenapi-refine = "4.4.0"
+kotlinx-coroutines = "1.10.2"
+moshi = "1.15.2"
+
+[libraries]
+core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
+hiddenapi-processor = { module = "dev.rikka.tools.refine:annotation-processor", version.ref = "hiddenapi-refine" }
+hiddenapi-annotation = { module = "dev.rikka.tools.refine:annotation", version.ref = "hiddenapi-refine" }
+hiddenapi-runtime = { module = "dev.rikka.tools.refine:runtime", version.ref = "hiddenapi-refine" }
+moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
+
+[plugins]
+agp-app = { id = "com.android.application", version.ref = "agp" }
+agp-lib = { id = "com.android.library", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+hiddenapi-refine = { id = "dev.rikka.tools.refine", version.ref = "hiddenapi-refine" }
+
+
+===== .\gradle\wrapper\gradle-wrapper.properties =====
+
+#Wed Apr 02 13:05:53 CST 2025
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.13-bin.zip
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+
+
+===== .\hiddenapi\.gitignore =====
+
+/build
+
+===== .\hiddenapi\build.gradle.kts =====
+
+plugins {
+    alias(libs.plugins.agp.lib)
+}
+
+val cfgMinSdkVersion: Int by rootProject.extra
+val cfgCompileSdkVersion: Int by rootProject.extra
+val cfgSourceCompatibility: JavaVersion by rootProject.extra
+val cfgTargetCompatibility: JavaVersion by rootProject.extra
+
+android {
+    namespace = "hidden.api.stub"
+    compileSdk = cfgCompileSdkVersion
+
+    defaultConfig {
+        minSdk = cfgMinSdkVersion
+        consumerProguardFiles("consumer-rules.pro")
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles("proguard-rules.pro")
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = cfgSourceCompatibility
+        targetCompatibility = cfgTargetCompatibility
+    }
+}
+
+dependencies {
+    compileOnly(libs.hiddenapi.annotation)
+    annotationProcessor(libs.hiddenapi.processor)
+}
+
+===== .\hiddenapi\consumer-rules.pro =====
+
+
+
+===== .\hiddenapi\proguard-rules.pro =====
+
+# Add project specific ProGuard rules here.
+# You can control the set of applied configuration files using the
+# proguardFiles setting in build.gradle.
+#
+# For more details, see
+#   http://developer.android.com/guide/developing/tools/proguard.html
+
+# If your project uses WebView with JS, uncomment the following
+# and specify the fully qualified class name to the JavaScript interface
+# class:
+#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
+#   public *;
+#}
+
+# Uncomment this to preserve the line number information for
+# debugging stack traces.
+#-keepattributes SourceFile,LineNumberTable
+
+# If you keep the line number information, uncomment this to
+# hide the original source file name.
+#-renamesourcefileattribute SourceFile
+
+===== .\hiddenapi\src\main\AndroidManifest.xml =====
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest />
+
+===== .\hiddenapi\src\main\java\android\hardware\input\InputManagerHidden.java =====
+
+package android.hardware.input;
+
+import android.view.InputEvent;
+
+import dev.rikka.tools.refine.RefineAs;
+
+@RefineAs(InputManager.class)
+public class InputManagerHidden {
+
+    public static InputManager getInstance() {
+        throw new RuntimeException("Stub!");
+    }
+
+    public boolean injectInputEvent(InputEvent event, int mode) {
+        throw new RuntimeException("Stub!");
+    }
+}
+
+
+===== .\scripts\run.sh =====
+
+adb shell /system/bin/app_process -Djava.class.path=/data/local/tmp/touchlink.apk / xyz.mufanc.taa.Main "$@"
+

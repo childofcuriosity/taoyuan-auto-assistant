@@ -83,7 +83,10 @@ class MainApp(tk.Tk):
         # === 新增这一行 ===
         self._input(g_run, "循环总轮数", "loop_count", 1, 0)
         tk.Label(g_run, text="(填9999即无限循环)", fg="gray", bg="white").grid(row=1, column=1, sticky="e", padx=5)
-        
+        # ================= 新增以下两行 =================
+        self._input(g_run, "延迟启动(分钟)", "start_delay_mins", 2, 0)
+        tk.Label(g_run, text="(填不小于0的纯数字)", fg="gray", bg="white").grid(row=2, column=1, sticky="e", padx=5)
+        # ================================================
         # === 复位坐标设置 ===
         g_reset = tk.LabelFrame(frame, text="复位逻辑坐标 (x y)", bg="white", font=("微软雅黑", 10, "bold"), padx=10, pady=10)
         g_reset.pack(fill=tk.X, pady=10)
