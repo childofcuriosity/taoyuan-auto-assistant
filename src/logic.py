@@ -16,6 +16,7 @@ class AppLogic:
             
             # --- 新增：循环次数 ---
             "loop_count": "1",
+            "start_delay_mins": "0",
             
             "small_delay": "1.5",
             "big_delay": "8",
@@ -140,7 +141,17 @@ class AppLogic:
         
     def run_all_tasks(self):
         self.apply_config_to_env()
-        
+
+        # ================= 新增：延迟启动逻辑 =================
+        try:
+            delay_mins = float(self.config.get("start_delay_mins", "0"))
+        except ValueError:
+            delay_mins = 0.0
+            
+        if delay_mins > 0:
+            print(f"=== 已设置延迟启动，正在等待 {delay_mins} 分钟... ===")
+            time.sleep(delay_mins * 60)  # 转换为秒
+
         # 获取循环次数
         try:
             total_loops = int(self.config.get("loop_count", "1"))

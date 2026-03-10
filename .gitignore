@@ -32,6 +32,6 @@ dist/
 # === 其他文件夹 ===
 old/
 assets/
-dump_py.py
-all_py_dump.txt
+dump.py
+all_dump.txt
 最终参数.json
